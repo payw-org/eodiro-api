@@ -1,0 +1,10 @@
+.vscode
+.DS_Store
+node_modules
+package-lock.json
+pm2.json
+build
+logs
+src/configs/private.ts
+src/resources/scrap
+src/resources/parse-debug
