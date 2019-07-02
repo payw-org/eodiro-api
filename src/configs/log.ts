@@ -10,7 +10,7 @@ const print_log = printf(({ level, message, timestamp }) => {
 const options = {
   file: {
     level: 'info',
-    filename: app_root.path + '/server/logs/info.log',
+    filename: app_root.path + '/logs/info.log',
     handleExceptions: true,
     json: false,
     maxsize: 5242880,
