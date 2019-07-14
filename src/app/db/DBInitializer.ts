@@ -6,11 +6,8 @@ import Floor from 'Database/models/floor'
 import Classroom from 'Database/models/classroom'
 import Lecture from 'Database/models/lecture'
 import all_metadata from 'Resources/metadata.json'
-import classes_cau from 'Resources/classes/cau.json'
-import classes_cau2 from 'Resources/classes/cau2.json'
-import classes_korea from 'Resources/classes/korea.json'
-import classes_yonsei from 'Resources/classes/yonsei.json'
-import classes_yonsei2 from 'Resources/classes/yonsei2.json'
+import classes_cau_seoul from 'Resources/classes/cau_seoul.json'
+import classes_cau_anseong from 'Resources/classes/cau_anseong.json'
 import { GlobalNameDoc } from 'Database/schemas/global_name'
 import { ClassDoc } from 'Database/schemas/class'
 import { UniversityDoc } from 'Database/schemas/university'
@@ -61,19 +58,13 @@ export default class DBInitializer {
     await this.insertMetadata(<UnivMetaJSON[]>all_metadata)
 
     await Promise.all([
-      this.insertClasses(<ClassesMetaJSON>classes_cau),
-      this.insertClasses(<ClassesMetaJSON>classes_cau2),
-      this.insertClasses(<ClassesMetaJSON>classes_korea),
-      this.insertClasses(<ClassesMetaJSON>classes_yonsei),
-      this.insertClasses(<ClassesMetaJSON>classes_yonsei2)
+      this.insertClasses(<ClassesMetaJSON>classes_cau_seoul),
+      this.insertClasses(<ClassesMetaJSON>classes_cau_anseong)
     ])
 
     await Promise.all([
-      this.build(classes_cau.vendor),
-      this.build(classes_cau2.vendor),
-      this.build(classes_korea.vendor),
-      this.build(classes_yonsei.vendor),
-      this.build(classes_yonsei2.vendor)
+      this.build(classes_cau_seoul.vendor),
+      this.build(classes_cau_anseong.vendor)
     ])
 
     return Promise.resolve()
