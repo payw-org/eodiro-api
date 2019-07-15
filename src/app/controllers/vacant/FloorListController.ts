@@ -14,7 +14,7 @@ interface FloorEmptyInfo extends FloorInfo {
   total_classroom: number
 }
 
-export default class FloorListMiddleware {
+export default class FloorListController {
   public async getList(
     vendor: string,
     building_num: string

@@ -15,7 +15,7 @@ interface BldgEmptyInfo extends BldgInfo {
   total_classroom: number
 }
 
-export default class BuildingListMiddleware {
+export default class BuildingListController {
   public async getList(
     vendor: string,
     language: string = 'ko'
