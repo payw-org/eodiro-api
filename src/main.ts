@@ -3,8 +3,8 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import expressSession from 'express-session'
 import server_config from 'Configs/server'
-import DBServiceProvider from 'Provider/DBServiceProvider'
-import APIServiceProvider from 'Provider/APIServiceProvider'
+import DBServiceProvider from 'Providers/DBServiceProvider'
+import APIServiceProvider from 'Providers/APIServiceProvider'
 const vhost = require('vhost')
 
 const db_provider = new DBServiceProvider()

@@ -9,8 +9,8 @@ interface CurrentDate {
   time: string
 }
 
-export default class EmptyFacilityController {
-  public async isClassroomEmpty(classroom_id: string): Promise<boolean> {
+export default class EmptyClassroomChecker {
+  public async isEmpty(classroom_id: string): Promise<boolean> {
     const classroom: ClassroomDoc = <ClassroomDoc>await Classroom.findById(
       classroom_id,
       {

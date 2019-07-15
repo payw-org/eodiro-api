@@ -1,14 +1,14 @@
 import express from 'express'
-import UniversityListMiddleware from 'Middleware/UniversityListMiddleware'
-import BuildingListMiddleware from 'Middleware/BuildingListMiddleware'
-import FloorListMiddleware from 'Middleware/FloorListMiddleware'
-import ClassroomListMiddleware from 'Middleware/ClassroomListMiddleware'
+import UniversityListController from 'Controllers/vacant/UniversityListController'
+import BuildingListController from 'Controllers/vacant/BuildingListController'
+import FloorListController from 'Controllers/vacant/FloorListController'
+import ClassroomListController from 'Controllers/vacant/ClassroomListController'
 
 const router = express.Router()
 
 // University list data
 router.get('/university', async (req, res) => {
-  const middleware = new UniversityListMiddleware()
+  const middleware = new UniversityListController()
 
   try {
     const univ_list = await middleware.getList(req.query.language)
@@ -21,7 +21,7 @@ router.get('/university', async (req, res) => {
 
 // Building list data
 router.get('/:vendor', async (req, res) => {
-  const middleware = new BuildingListMiddleware()
+  const middleware = new BuildingListController()
 
   try {
     const building_list = await middleware.getList(
@@ -37,7 +37,7 @@ router.get('/:vendor', async (req, res) => {
 
 // Building list data include number of empty classrooms
 router.get('/:vendor/empty', async (req, res) => {
-  const middleware = new BuildingListMiddleware()
+  const middleware = new BuildingListController()
 
   try {
     const building_list = await middleware.getListIncludeEmptyNum(
@@ -53,7 +53,7 @@ router.get('/:vendor/empty', async (req, res) => {
 
 // Floor list data
 router.get('/:vendor/:building_num', async (req, res) => {
-  const middleware = new FloorListMiddleware()
+  const middleware = new FloorListController()
 
   try {
     const floor_list = await middleware.getList(
@@ -69,7 +69,7 @@ router.get('/:vendor/:building_num', async (req, res) => {
 
 // Floor list data include number of empty classrooms
 router.get('/:vendor/:building_num/empty', async (req, res) => {
-  const middleware = new FloorListMiddleware()
+  const middleware = new FloorListController()
 
   try {
     const floor_list = await middleware.getListIncludeEmptyNum(
@@ -85,7 +85,7 @@ router.get('/:vendor/:building_num/empty', async (req, res) => {
 
 // Classroom list data
 router.get('/:vendor/:building_num/:floor_num', async (req, res) => {
-  const middleware = new ClassroomListMiddleware()
+  const middleware = new ClassroomListController()
 
   try {
     const classroom_list = await middleware.getList(

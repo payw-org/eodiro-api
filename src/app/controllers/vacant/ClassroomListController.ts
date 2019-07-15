@@ -19,7 +19,7 @@ interface ClassroomInfo {
   lectures: LectureInfo[]
 }
 
-export default class ClassroomListMiddleware {
+export default class ClassroomListController {
   public async getList(
     vendor: string,
     building_num: string,

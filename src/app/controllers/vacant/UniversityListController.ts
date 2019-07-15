@@ -9,7 +9,7 @@ interface UnivInfo {
   vendor: string
 }
 
-export default class UniversityListMiddleware {
+export default class UniversityListController {
   public async getList(language: string = 'ko'): Promise<UnivInfo[]> {
     const universities = <UniversityDoc[]>await University.find(
       {},
