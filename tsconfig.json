@@ -18,7 +18,8 @@
       "Controller/*": ["src/app/controller/*"],
       "DB/*": ["src/app/db/*"],
       "Middleware/*": ["src/app/middleware/*"],
-      "Provider/*": ["src/app/provider/*"]
+      "Provider/*": ["src/app/provider/*"],
+      "Helpers/*": ["src/app/helpers/*"]
     },
     "types": ["node"],
     "allowSyntheticDefaultImports": true

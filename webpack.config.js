@@ -23,7 +23,8 @@ module.exports = {
       Controller: __dirname + '/src/app/controller/',
       DB: __dirname + '/src/app/db/',
       Middleware: __dirname + '/src/app/middleware/',
-      Provider: __dirname + '/src/app/provider/'
+      Provider: __dirname + '/src/app/provider/',
+      Helpers: __dirname + '/src/app/helpers'
     }
   },
   module: {

@@ -1,5 +1,5 @@
 import University from 'Database/models/university'
-import EmptyFacilityController from 'Controller/EmptyFacilityController'
+import EmptyClassroomChecker from 'Helpers/EmptyClassroomChecker'
 import logger from 'Configs/log'
 import { UniversityDoc } from 'Database/schemas/university'
 import { BuildingDoc } from 'Database/schemas/building'
@@ -111,7 +111,7 @@ export default class FloorListMiddleware {
       return int_a > int_b ? -1 : int_a < int_b ? 1 : 0
     })
 
-    const empty_controller = new EmptyFacilityController()
+    const empty_controller = new EmptyClassroomChecker()
     const floor_list: FloorEmptyInfo[] = []
     const promise_list: Promise<boolean>[][] = []
 
@@ -119,9 +119,7 @@ export default class FloorListMiddleware {
       promise_list[index] = []
 
       floor.classrooms.forEach((classroom_id: string) => {
-        promise_list[index].push(
-          empty_controller.isClassroomEmpty(classroom_id)
-        )
+        promise_list[index].push(empty_controller.isEmpty(classroom_id))
       })
 
       floor_list.push({
