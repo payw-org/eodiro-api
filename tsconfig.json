@@ -15,10 +15,10 @@
       "Database/*": ["src/database/*"],
       "Resources/*": ["src/resources/*"],
       "Routes/*": ["src/routes/*"],
-      "Controller/*": ["src/app/controller/*"],
+      "Controllers/*": ["src/app/controllers/*"],
       "DB/*": ["src/app/db/*"],
       "Middleware/*": ["src/app/middleware/*"],
-      "Provider/*": ["src/app/provider/*"],
+      "Providers/*": ["src/app/providers/*"],
       "Helpers/*": ["src/app/helpers/*"]
     },
     "types": ["node"],

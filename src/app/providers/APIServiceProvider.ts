@@ -1,6 +1,6 @@
 import express, { Express } from 'express'
 import bodyParser from 'body-parser'
-import router from 'Routes/api/index'
+import router from 'Routes/api'
 
 export default class APIServiceProvider {
   private app: Express
