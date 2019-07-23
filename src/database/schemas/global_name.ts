@@ -10,14 +10,14 @@ import mongoose, { Document } from 'mongoose'
 export interface GlobalNameDoc extends Document {
   [index: string]: string | any
   ko: string
-  en?: string
+  en: string
   zh?: string
   fr?: string
 }
 
 const globalNameSchema = new mongoose.Schema({
   ko: { type: String, required: true },
-  en: { type: String },
+  en: { type: String, required: true },
   zh: { type: String },
   fr: { type: String }
 })
