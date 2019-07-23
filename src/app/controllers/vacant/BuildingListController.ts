@@ -16,10 +16,7 @@ interface BldgEmptyInfo extends BldgInfo {
 }
 
 export default class BuildingListController {
-  public async getList(
-    vendor: string,
-    language: string = 'ko'
-  ): Promise<BldgInfo[]> {
+  public async getList(vendor: string): Promise<BldgInfo[]> {
     const university = <UniversityDoc>await University.findOne(
       { vendor: vendor },
       { _id: 0, buildings: 1 },
@@ -49,7 +46,7 @@ export default class BuildingListController {
       if (building.floors.length != 0) {
         building_list.push({
           number: building.number,
-          name: building.name[language]
+          name: building.name
         })
       }
     })
@@ -58,8 +55,7 @@ export default class BuildingListController {
   }
 
   public async getListIncludeEmptyNum(
-    vendor: string,
-    language: string = 'ko'
+    vendor: string
   ): Promise<BldgEmptyInfo[]> {
     const university = <UniversityDoc>await University.findOne(
       { vendor: vendor },
@@ -106,7 +102,7 @@ export default class BuildingListController {
 
         building_list.push({
           number: building.number,
-          name: building.name[language],
+          name: building.name,
           empty_classroom: 0,
           total_classroom: promise_list[promise_list.length - 1].length
         })

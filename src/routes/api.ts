@@ -38,8 +38,7 @@ router.get('/:vendor/empty', async (req, res) => {
 
   try {
     const building_list = await controller.getListIncludeEmptyNum(
-      req.params.vendor,
-      req.query.language
+      req.params.vendor
     )
 
     res.json({ err: false, buildings: building_list })
