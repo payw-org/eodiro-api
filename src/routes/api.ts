@@ -96,9 +96,4 @@ router.get('/:vendor/:building_num/:floor_num', async (req, res) => {
   }
 })
 
-// invalid request
-router.get('*', (req, res) => {
-  res.status(404).json({ err: true, msg: 'invalid request' })
-})
-
 export default router
