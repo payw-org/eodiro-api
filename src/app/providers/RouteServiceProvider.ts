@@ -1,8 +1,9 @@
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import express, { Express, Request, Response, NextFunction } from 'express'
+import express, { Express } from 'express'
 import router from 'Routes/api'
-import logger from 'Configs/log'
+import HandleClientError from 'Middleware/HandleClientError'
+import HandleServerError from 'Middleware/HandleServerError'
 
 export default class RouteServiceProvider {
   private app: Express
@@ -14,14 +15,8 @@ export default class RouteServiceProvider {
   ]
 
   private errorHandlerMiddleware = [
-    (req: Request, res: Response, next: NextFunction) => {
-      res.status(404).json({ err: { msg: 'Invalid request' } })
-    },
-
-    (err: any, req: Request, res: Response, next: NextFunction) => {
-      logger.error(err.stack)
-      res.status(500).json({ err: { msg: 'Internal server error' } })
-    }
+    new HandleClientError().handler(),
+    new HandleServerError().handler()
   ]
 
   public constructor() {
