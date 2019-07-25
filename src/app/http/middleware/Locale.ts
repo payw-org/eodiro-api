@@ -7,7 +7,7 @@ export default class Locale implements Middleware {
     'en'
   ]
 
-  handler(): NextHandler {
+  public handler(): NextHandler {
     return (req, res, next) => {
       // check if language code is not set
       if (!req.body.hasOwnProperty('language')) {

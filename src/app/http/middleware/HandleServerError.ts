@@ -3,7 +3,7 @@ import { ErrorHandler } from 'Http/RequestHandler'
 import logger from 'Configs/log'
 
 export default class HandleServerError implements Middleware {
-  handler(): ErrorHandler {
+  public handler(): ErrorHandler {
     return (err, req, res, next) => {
       logger.error(err.stack)
       res.status(500).json({
