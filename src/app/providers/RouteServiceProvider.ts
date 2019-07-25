@@ -28,7 +28,7 @@ export default class RouteServiceProvider {
     this.app = express()
   }
 
-  public boot() {
+  public boot(): Express {
     this.app.use(this.basicMiddleware)
     this.app.use(router)
     this.app.use(this.errorHandlerMiddleware)
