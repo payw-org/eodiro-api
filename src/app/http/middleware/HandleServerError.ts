@@ -1,4 +1,5 @@
-import Middleware, { ErrorHandler } from 'Http/middleware/Middleware'
+import Middleware from 'Http/middleware/Middleware'
+import { ErrorHandler } from 'Http/RequestHandler'
 import logger from 'Configs/log'
 
 export default class HandleServerError implements Middleware {

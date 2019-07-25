@@ -1,4 +1,5 @@
-import Middleware, { SimpleHandler } from 'Http/middleware/Middleware'
+import Middleware from 'Http/middleware/Middleware'
+import { SimpleHandler } from 'Http/RequestHandler'
 
 export default class HandleClientError implements Middleware {
   handler(): SimpleHandler {
