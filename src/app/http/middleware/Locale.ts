@@ -6,6 +6,9 @@ export default class Locale {
     'en'
   ]
 
+  /**
+   * Check and set language code.
+   */
   public static handler(): NextHandler {
     return (req, res, next) => {
       // check if language code is not set
