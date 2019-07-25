@@ -1,8 +1,8 @@
 import express from 'express'
-import UniversityListController from 'Controllers/vacant/UniversityListController'
-import BuildingListController from 'Controllers/vacant/BuildingListController'
-import FloorListController from 'Controllers/vacant/FloorListController'
-import ClassroomListController from 'Controllers/vacant/ClassroomListController'
+import UniversityListController from 'Http/controllers/vacant/UniversityListController'
+import BuildingListController from 'Http/controllers/vacant/BuildingListController'
+import FloorListController from 'Http/controllers/vacant/FloorListController'
+import ClassroomListController from 'Http/controllers/vacant/ClassroomListController'
 
 const router = express.Router()
 

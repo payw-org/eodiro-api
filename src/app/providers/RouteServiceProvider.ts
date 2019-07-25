@@ -2,8 +2,8 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import express, { Express } from 'express'
 import router from 'Routes/api'
-import HandleClientError from 'Middleware/HandleClientError'
-import HandleServerError from 'Middleware/HandleServerError'
+import HandleClientError from 'Http/middleware/HandleClientError'
+import HandleServerError from 'Http/middleware/HandleServerError'
 
 export default class RouteServiceProvider {
   private app: Express

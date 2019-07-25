@@ -10,7 +10,7 @@ interface UnivInfo {
 }
 
 export default class UniversityListController {
-  public async getList(language: string = 'ko'): Promise<UnivInfo[]> {
+  public async getList(language: string): Promise<UnivInfo[]> {
     const universities = <UniversityDoc[]>await University.find(
       {},
       { _id: 0, name: 1, campus: 1, vendor: 1 },

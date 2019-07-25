@@ -1,4 +1,4 @@
-import Middleware, { NextHandler } from 'Middleware/Middleware'
+import Middleware, { NextHandler } from 'Http/middleware/Middleware'
 
 export default class Locale implements Middleware {
   private supportedCodes = [

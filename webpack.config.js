@@ -20,11 +20,10 @@ module.exports = {
       Resources: __dirname + '/src/resources/',
       Routes: __dirname + '/src/routes/',
 
-      Controllers: __dirname + '/src/app/controllers/',
       DB: __dirname + '/src/app/db/',
-      Middleware: __dirname + '/src/app/middleware/',
       Providers: __dirname + '/src/app/providers/',
-      Helpers: __dirname + '/src/app/helpers'
+      Helpers: __dirname + '/src/app/helpers',
+      Http: __dirname + '/src/app/http'
     }
   },
   module: {
