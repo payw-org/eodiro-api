@@ -1,9 +1,4 @@
-import Middleware, {
-  Request,
-  Response,
-  NextFunction,
-  NextHandler
-} from 'Middleware/Middleware'
+import Middleware, { NextHandler } from 'Middleware/Middleware'
 
 export default class Locale implements Middleware {
   private supportedCodes = [
@@ -12,7 +7,7 @@ export default class Locale implements Middleware {
   ]
 
   handler(): NextHandler {
-    return (req: Request, res: Response, next: NextFunction) => {
+    return (req, res, next) => {
       // check if language code is not set
       if (!req.body.hasOwnProperty('language')) {
         req.body.language = this.supportedCodes[0] // set to main language
