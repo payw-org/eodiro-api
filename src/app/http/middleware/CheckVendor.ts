@@ -19,7 +19,7 @@ export default class CheckVendor {
 
       // if not exist
       if (count === 0) {
-        res.status(404).json({
+        return res.status(404).json({
           err: {
             msg: 'Vendor not found'
           }

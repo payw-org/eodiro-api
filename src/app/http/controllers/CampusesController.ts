@@ -30,7 +30,7 @@ export default class CampusesController {
 
       // if not exist
       if (universities.length === 0) {
-        res.status(404).json({
+        return res.status(404).json({
           err: {
             msg: 'Campuses not found'
           }
@@ -47,7 +47,7 @@ export default class CampusesController {
         })
       })
 
-      res.status(200).json({
+      return res.status(200).json({
         campuses: campus_list
       })
     }
