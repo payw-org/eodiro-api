@@ -11,13 +11,13 @@ export default class Locale {
       // check if language code is not set
       if (!req.body.hasOwnProperty('language')) {
         req.body.language = this.supportedCodes[0] // set to main language
-        next()
+
+        return next()
       }
 
+      // check if language code is valid
       req.body.language = req.body.language.toLowerCase()
-
-      // check if language code is exist
-      if (!this.supportedCodes.includes(req.body.language.toLowerCase())) {
+      if (!this.supportedCodes.includes(req.body.language)) {
         res.status(406).json({
           err: {
             msg: 'Not supported language code'
@@ -25,7 +25,7 @@ export default class Locale {
         })
       }
 
-      next()
+      return next()
     }
   }
 }
