@@ -1,13 +1,12 @@
-import Middleware from 'Http/middleware/Middleware'
 import { NextHandler } from 'Http/RequestHandler'
 
-export default class Locale implements Middleware {
-  private supportedCodes = [
+export default class Locale {
+  private static supportedCodes = [
     'kr', // main language
     'en'
   ]
 
-  public handler(): NextHandler {
+  public static handler(): NextHandler {
     return (req, res, next) => {
       // check if language code is not set
       if (!req.body.hasOwnProperty('language')) {
