@@ -18,7 +18,7 @@ export default class Locale {
       // check if language code is valid
       req.body.language = req.body.language.toLowerCase()
       if (!this.supportedCodes.includes(req.body.language)) {
-        res.status(406).json({
+        res.status(404).json({
           err: {
             msg: 'Not supported language code'
           }

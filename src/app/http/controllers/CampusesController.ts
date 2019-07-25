@@ -11,7 +11,7 @@ interface CampusDesc {
 
 export default class CampusesController {
   /**
-   * Display a listing of the campus.
+   * Get a listing of the campus.
    */
   public static index(): SimpleHandler {
     return async (req, res) => {
