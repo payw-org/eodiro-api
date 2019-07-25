@@ -1,11 +1,11 @@
 [
   {
     "name": {
-      "ko": "중앙대학교",
+      "kr": "중앙대학교",
       "en": "Chung-Ang University"
     },
     "campus": {
-      "ko": "서울",
+      "kr": "서울",
       "en": "Seoul"
     },
     "vendor": "seoul",
@@ -98,11 +98,11 @@
   },
   {
     "name": {
-      "ko": "중앙대학교",
+      "kr": "중앙대학교",
       "en": "Chung-Ang University"
     },
     "campus": {
-      "ko": "안성",
+      "kr": "안성",
       "en": "Anseong"
     },
     "vendor": "anseong",
