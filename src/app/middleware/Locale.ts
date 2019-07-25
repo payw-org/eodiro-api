@@ -6,7 +6,7 @@ import Middleware, {
 } from 'Middleware/Middleware'
 
 export default class Locale implements Middleware {
-  private supportedLanguageCodes = [
+  private supportedCodes = [
     'kr', // main language
     'en'
   ]
@@ -15,12 +15,14 @@ export default class Locale implements Middleware {
     return (req: Request, res: Response, next: NextFunction) => {
       // check if language code is not set
       if (!req.body.hasOwnProperty('language')) {
-        req.body.language = this.supportedLanguageCodes[0] // set to main language
+        req.body.language = this.supportedCodes[0] // set to main language
         next()
       }
 
+      req.body.language = req.body.language.toLowerCase()
+
       // check if language code is exist
-      if (!this.supportedLanguageCodes.includes(req.body.language)) {
+      if (!this.supportedCodes.includes(req.body.language.toLowerCase())) {
         res.status(406).json({
           err: {
             msg: 'Not supported language code'
