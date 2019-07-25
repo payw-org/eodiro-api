@@ -15,8 +15,8 @@ export default class RouteServiceProvider {
   ]
 
   private errorHandlerMiddleware = [
-    new HandleClientError().handler(),
-    new HandleServerError().handler()
+    HandleClientError.handler(),
+    HandleServerError.handler()
   ]
 
   public constructor() {
