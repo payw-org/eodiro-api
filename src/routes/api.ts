@@ -16,6 +16,11 @@ const router = express.Router()
 router.use('/campuses/:vendor', CheckVendorMiddleware.handler())
 
 /**
+ * Sub router
+ */
+router.use('/campuses/:vendor/vacant', vacant_router)
+
+/**
  * Controller
  */
 // show campus list
