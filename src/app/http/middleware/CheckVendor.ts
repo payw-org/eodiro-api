@@ -10,21 +10,27 @@ export default class CheckVendor {
     return async (req, res, next) => {
       let vendor = req.params.vendor
 
-      // find(count) vendor
-      let count = await University.count({ vendor: vendor }, err => {
-        if (err) {
-          logger.error(err)
+      // Find university id by vendor
+      let university = await University.findOne(
+        { vendor: vendor },
+        { _id: 1 },
+        err => {
+          if (err) {
+            logger.error(err)
+          }
         }
-      })
+      )
 
-      // if not exist
-      if (count === 0) {
+      // if not found
+      if (!university) {
         return res.status(404).json({
           err: {
             msg: 'Vendor not found.'
           }
         })
       }
+
+      res.locals.univ_id = university._id
 
       return next()
     }
