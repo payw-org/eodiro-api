@@ -4,7 +4,7 @@ import logger from 'Configs/log'
 
 export default class CheckVendor {
   /**
-   * Check if vendor is not exist.
+   * Check if vendor is not exist and get university id.
    */
   public static handler(): NextHandler {
     return async (req, res, next) => {
@@ -21,7 +21,7 @@ export default class CheckVendor {
       if (count === 0) {
         return res.status(404).json({
           err: {
-            msg: 'Vendor not found'
+            msg: 'Vendor not found.'
           }
         })
       }

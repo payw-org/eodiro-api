@@ -23,7 +23,7 @@ export default class Locale {
       if (!this.supportedCodes.includes(req.body.language)) {
         return res.status(404).json({
           err: {
-            msg: 'Not supported language code'
+            msg: 'Not supported language code.'
           }
         })
       }

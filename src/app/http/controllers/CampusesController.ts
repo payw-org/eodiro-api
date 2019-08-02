@@ -32,7 +32,7 @@ export default class CampusesController {
       if (universities.length === 0) {
         return res.status(404).json({
           err: {
-            msg: 'Campuses not found'
+            msg: 'Campuses not found.'
           }
         })
       }
