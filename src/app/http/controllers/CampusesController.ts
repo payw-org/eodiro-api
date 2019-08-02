@@ -3,7 +3,7 @@ import University from 'Database/models/university'
 import logger from 'Configs/log'
 import { UniversityDoc } from 'Database/schemas/university'
 
-interface CampusDesc {
+interface CampusInfo {
   university: string
   campus: string
   vendor: string
@@ -38,7 +38,7 @@ export default class CampusesController {
       }
 
       // data formatting
-      const campus_list: CampusDesc[] = []
+      const campus_list: CampusInfo[] = []
       universities.forEach(univ => {
         campus_list.push({
           university: univ.name[language],
