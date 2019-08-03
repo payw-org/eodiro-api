@@ -10,8 +10,8 @@ export default class CheckVendor {
     return async (req, res, next) => {
       let vendor = req.params.vendor
 
-      // Find university id by vendor
-      let university = await University.findOne(
+      // Find university id
+      const university = await University.findOne(
         { vendor: vendor },
         { _id: 1 },
         err => {
@@ -30,6 +30,7 @@ export default class CheckVendor {
         })
       }
 
+      // pass the university document id
       res.locals.univ_id = university._id
 
       return next()

@@ -5,7 +5,7 @@
  * @copyright 2019 Payw
  */
 
-import mongoose from 'mongoose'
+import mongoose, { Document } from 'mongoose'
 import { UniversityDoc } from './university'
 import { FloorDoc } from './floor'
 
