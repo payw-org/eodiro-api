@@ -13,7 +13,7 @@ router.use('/buildings/:building', CheckBuildingMiddleware.handler())
 /**
  * Controller
  */
-// show building list
+// show building list of the university
 router.get('/buildings', BuildingsController.index())
 
 // show floor list of the building
