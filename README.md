@@ -1,4 +1,4 @@
-![Getting started](https://user-images.githubusercontent.com/37792049/61607585-64e98280-ac8a-11e9-9fab-63e53e80de4a.png)
+![Getting started](https://user-images.githubusercontent.com/37792049/62421767-eeb13b00-b6e1-11e9-8cfa-fce1722516d5.png)
 
 # eodiro API server
 
