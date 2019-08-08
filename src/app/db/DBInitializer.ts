@@ -20,7 +20,7 @@ interface ClassesMetaJSON {
 interface BldgMetaJSON {
   university: string
   number: string
-  name: GlobalNameDoc
+  name: string
 }
 
 interface UnivMetaJSON {

@@ -1,433 +1,259 @@
 [
   {
     "name": {
-      "ko": "중앙대학교",
+      "kr": "중앙대학교",
       "en": "Chung-Ang University"
     },
     "campus": {
-      "ko": "서울",
+      "kr": "서울",
       "en": "Seoul"
     },
-    "vendor": "cau",
+    "vendor": "seoul",
     "buildings": [
       {
         "number": "101",
-        "name": {
-          "ko": "영신관",
-          "en": "Young-shin Hall"
-        }
+        "name": "영신관"
       },
       {
         "number": "102",
-        "name": {
-          "ko": "약학대학 및 R&D센터",
-          "en": "College of Pharmacy/R&D Center"
-        }
+        "name": "약학대학 및 R&D센터"
       },
       {
         "number": "103",
-        "name": {
-          "ko": "파이퍼홀",
-          "en": "Pfeiffer Hall"
-        }
+        "name": "파이퍼홀"
       },
       {
         "number": "104",
-        "name": {
-          "ko": "수림과학관",
-          "en": "College of Natural Sciences"
-        }
+        "name": "수림과학관"
       },
       {
         "number": "105",
-        "name": {
-          "ko": "제1의학관",
-          "en": "College of Medicine 1"
-        }
+        "name": "제1의학관"
       },
       {
         "number": "106",
-        "name": {
-          "ko": "제2의학관",
-          "en": "College of Medicine 2"
-        }
+        "name": "제2의학관"
       },
       {
         "number": "107",
-        "name": {
-          "ko": "학생회관",
-          "en": "Student Union Hall"
-        }
+        "name": "학생회관"
       },
       {
         "number": "201",
-        "name": {
-          "ko": "본관",
-          "en": "Main Administration Bldg"
-        }
+        "name": "본관"
       },
       {
         "number": "202",
-        "name": {
-          "ko": "전산정보관",
-          "en": "Computer & Information Center"
-        }
+        "name": "전산정보관"
       },
       {
         "number": "203",
-        "name": {
-          "ko": "서라벌홀",
-          "en": "College of Humanities"
-        }
+        "name": "서라벌홀"
       },
       {
         "number": "204",
-        "name": {
-          "ko": "중앙도서관",
-          "en": "Central Library"
-        }
+        "name": "중앙도서관"
       },
       {
         "number": "207",
-        "name": {
-          "ko": "봅스트홀",
-          "en": "Bobst Hall"
-        }
+        "name": "봅스트홀"
       },
       {
         "number": "208",
-        "name": {
-          "ko": "제2공학관",
-          "en": "College of Engineering 2"
-        }
+        "name": "제2공학관"
       },
       {
         "number": "209",
-        "name": {
-          "ko": "창업보육관",
-          "en": "Business Incubator Center"
-        }
+        "name": "창업보육관"
       },
       {
         "number": "301",
-        "name": {
-          "ko": "중앙문화예술관",
-          "en": "Art Center"
-        }
+        "name": "중앙문화예술관"
       },
       {
         "number": "302",
-        "name": {
-          "ko": "대학원",
-          "en": "Graduate School Building"
-        }
+        "name": "대학원"
       },
       {
         "number": "303",
-        "name": {
-          "ko": "법학관",
-          "en": "Law School Bldg"
-        }
+        "name": "법학관"
       },
       {
         "number": "304",
-        "name": {
-          "ko": "미디어공연영상관",
-          "en": "Performing Arts and Media Bldg"
-        }
+        "name": "미디어공연영상관"
       },
       {
         "number": "305",
-        "name": {
-          "ko": "교수연구동 및 체육관",
-          "en": "Faculty Office Building / Gymnasium"
-        }
+        "name": "교수연구동 및 체육관"
       },
       {
         "number": "309",
-        "name": {
-          "ko": "블루미르홀",
-          "en": "Blue Mir Hall 2"
-        }
+        "name": "블루미르홀"
       },
       {
         "number": "310",
-        "name": {
-          "ko": "100주년기념관",
-          "en": "Centennial Hall"
-        }
+        "name": "100주년기념관"
       }
     ]
   },
   {
     "name": {
-      "ko": "중앙대학교",
+      "kr": "중앙대학교",
       "en": "Chung-Ang University"
     },
     "campus": {
-      "ko": "안성",
+      "kr": "안성",
       "en": "Anseong"
     },
-    "vendor": "cau2",
+    "vendor": "anseong",
     "buildings": [
       {
         "number": "601",
-        "name": {
-          "ko": "교직원회관 1동",
-          "en": "Faculty Residence 1"
-        }
+        "name": "교직원회관 1동"
       },
       {
         "number": "602",
-        "name": {
-          "ko": "교직원회관 2동",
-          "en": "Faculty Residence 2"
-        }
+        "name": "교직원회관 2동"
       },
       {
         "number": "603",
-        "name": {
-          "ko": "교직원회관 3동",
-          "en": "Faculty Residence 3"
-        }
+        "name": "교직원회관 3동"
       },
       {
         "number": "605",
-        "name": {
-          "ko": "제1 음악관",
-          "en": "College of Music 1"
-        }
+        "name": "제1 음악관"
       },
       {
         "number": "606",
-        "name": {
-          "ko": "제2 음악관",
-          "en": "College of Music 1"
-        }
+        "name": "제2 음악관"
       },
       {
         "number": "607",
-        "name": {
-          "ko": "영신 음악관",
-          "en": "Young-shin Music Hall"
-        }
+        "name": "영신 음악관"
       },
       {
         "number": "608",
-        "name": {
-          "ko": "국악관",
-          "en": ""
-        }
+        "name": "국악관"
       },
       {
         "number": "609",
-        "name": {
-          "ko": "생활과학관",
-          "en": "College of Human Ecology"
-        }
+        "name": "생활과학관"
       },
       {
         "number": "610",
-        "name": {
-          "ko": "학생복지관",
-          "en": "Student Welfare Center"
-        }
+        "name": "학생복지관"
       },
       {
         "number": "611",
-        "name": {
-          "ko": "학생회관",
-          "en": "Student Union Hall"
-        }
+        "name": "학생회관"
       },
       {
         "number": "701",
-        "name": {
-          "ko": "Dormitory Yeji 1",
-          "en": "Art Center"
-        }
+        "name": "예지 1동"
       },
       {
         "number": "702",
-        "name": {
-          "ko": "예지 2동",
-          "en": "Dormitory Yeji 2"
-        }
+        "name": "예지 2동"
       },
       {
         "number": "703",
-        "name": {
-          "ko": "예지 3동",
-          "en": "Dormitory Yeji 3"
-        }
+        "name": "예지 3동"
       },
       {
         "number": "704",
-        "name": {
-          "ko": "명덕 1동",
-          "en": "Dormitory Myeongdeok 1"
-        }
+        "name": "명덕 1동"
       },
       {
         "number": "705",
-        "name": {
-          "ko": "명덕 2동",
-          "en": "Dormitory Myeongdeok 2"
-        }
+        "name": "명덕 2동"
       },
       {
         "number": "706",
-        "name": {
-          "ko": "명덕 3동",
-          "en": "Dormitory Myeongdeok 3"
-        }
+        "name": "명덕 3동"
       },
       {
         "number": "707",
-        "name": {
-          "ko": "학생후생관",
-          "en": "Student Social Center"
-        }
+        "name": "학생후생관"
       },
       {
         "number": "708",
-        "name": {
-          "ko": "생활복지관",
-          "en": "Campus Welfare Center"
-        }
+        "name": "생활복지관"
       },
       {
         "number": "801",
-        "name": {
-          "ko": "외국어 문학관",
-          "en": "College of Foreign Languages"
-        }
+        "name": "외국어 문학관"
       },
       {
         "number": "802",
-        "name": {
-          "ko": "교수연구관",
-          "en": "Faculty Office Bldg"
-        }
+        "name": "교수연구관"
       },
       {
         "number": "803",
-        "name": {
-          "ko": "조소관 2관",
-          "en": "College of Arts (Sculpture)2"
-        }
+        "name": "조소관 2관"
       },
       {
         "number": "804",
-        "name": {
-          "ko": "조소관 1관",
-          "en": "College of Arts (Sculpture)1"
-        }
+        "name": "조소관 1관"
       },
       {
         "number": "805-806",
-        "name": {
-          "ko": "공연영상관",
-          "en": "College of Arts (Photograph,Dance,Drama)"
-        }
+        "name": "공연영상관"
       },
       {
         "number": "807",
-        "name": {
-          "ko": "공예관",
-          "en": "College of Arts (Craft)"
-        }
+        "name": "공예관"
       },
       {
         "number": "808",
-        "name": {
-          "ko": "조형관",
-          "en": "College of Arts (Painting,Design)"
-        }
+        "name": "조형관"
       },
       {
         "number": "809",
-        "name": {
-          "ko": "생명공학관 1관",
-          "en": "College of Biotechnology and Natural Resources"
-        }
+        "name": "생명공학관 1관"
       },
       {
         "number": "810",
-        "name": {
-          "ko": "원형관",
-          "en": "Da Vinci College of General Education"
-        }
+        "name": "원형관"
       },
       {
         "number": "811",
-        "name": {
-          "ko": "창업보육센터",
-          "en": "Business Incubator Center 1"
-        }
+        "name": "창업보육센터"
       },
       {
         "number": "812",
-        "name": {
-          "ko": "선수생활관",
-          "en": "Athlethics Residence"
-        }
+        "name": "선수생활관"
       },
       {
         "number": "813",
-        "name": {
-          "ko": "대학교회",
-          "en": "University Chapel"
-        }
+        "name": "대학교회"
       },
       {
         "number": "901",
-        "name": {
-          "ko": "본관",
-          "en": "Main Administration Bldg"
-        }
+        "name": "본관"
       },
       {
         "number": "902",
-        "name": {
-          "ko": "중앙도서관",
-          "en": "Central Library"
-        }
+        "name": "중앙도서관"
       },
       {
         "number": "903",
-        "name": {
-          "ko": "승차장",
-          "en": "Bus Platform"
-        }
+        "name": "승차장"
       },
       {
         "number": "904",
-        "name": {
-          "ko": "생명공학관 2관",
-          "en": "College of Biotechnology and Natural Resources 2"
-        }
+        "name": "생명공학관 2관"
       },
       {
         "number": "906",
-        "name": {
-          "ko": "창업보육센터 2관",
-          "en": "Business Incubator Center 2"
-        }
+        "name": "창업보육센터 2관"
       },
       {
         "number": "907",
-        "name": {
-          "ko": "수림체육관",
-          "en": "College of Sport Sciences"
-        }
+        "name": "수림체육관"
       },
       {
         "number": "908",
-        "name": {
-          "ko": "체육관",
-          "en": "Gymnasium"
-        }
+        "name": "체육관"
       }
     ]
   }

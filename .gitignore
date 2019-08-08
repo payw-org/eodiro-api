@@ -8,3 +8,4 @@ logs
 src/configs/private.ts
 src/resources/scrap
 src/resources/parse-debug
+.idea

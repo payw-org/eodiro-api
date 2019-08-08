@@ -15,11 +15,10 @@
       "Database/*": ["src/database/*"],
       "Resources/*": ["src/resources/*"],
       "Routes/*": ["src/routes/*"],
-      "Controllers/*": ["src/app/controllers/*"],
       "DB/*": ["src/app/db/*"],
-      "Middleware/*": ["src/app/middleware/*"],
       "Providers/*": ["src/app/providers/*"],
-      "Helpers/*": ["src/app/helpers/*"]
+      "Helpers/*": ["src/app/helpers/*"],
+      "Http/*": ["src/app/http/*"]
     },
     "types": ["node"],
     "allowSyntheticDefaultImports": true
