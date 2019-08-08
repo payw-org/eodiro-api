@@ -13,7 +13,10 @@ export default class CheckFloor {
 
       // find floor id
       const floor = await Floor.findOne(
-        { building: bldg_id, number: floor_num },
+        {
+          building: bldg_id,
+          number: { $regex: new RegExp('^' + floor_num.toLowerCase(), 'i') }
+        },
         { _id: 1 },
         err => {
           if (err) {
