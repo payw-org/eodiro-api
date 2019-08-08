@@ -9,20 +9,20 @@ export default class FloorsComparator {
    */
   public static comparator(): Comparator {
     return (a, b) => {
-      let int_a = this.floorToInt(a.number)
-      let int_b = this.floorToInt(b.number)
+      let num_a = this.floorToNumber(a.number)
+      let num_b = this.floorToNumber(b.number)
 
-      return int_a > int_b ? -1 : int_a < int_b ? 1 : 0
+      return num_a > num_b ? -1 : num_a < num_b ? 1 : 0
     }
   }
 
   /**
-   * Convert floor number string to int.
+   * Convert floor string to number.
    * ex) `B3` -> `-3`
    *
    * @param floor
    */
-  private static floorToInt(floor: string): number {
+  private static floorToNumber(floor: string): number {
     // check if basement floor
     if (floor.substring(0, 1).toLowerCase() == 'b') {
       return -parseInt(floor.substring(1))
