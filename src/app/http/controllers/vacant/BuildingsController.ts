@@ -53,7 +53,6 @@ export default class BuildingsController {
 
       const building_list: BldgInfo[] = []
       const promise_list: Promise<boolean>[][] = [] // empty check promise list
-      const empty_checker = new EmptyClassroomChecker()
 
       // data formatting
       buildings.forEach((bldg: BuildingDoc) => {
@@ -64,7 +63,7 @@ export default class BuildingsController {
           bldg.floors.forEach((floor: FloorDoc) => {
             floor.classrooms.forEach((classroom_id: string) => {
               promise_list[promise_list.length - 1].push(
-                empty_checker.isEmpty(classroom_id)
+                EmptyClassroomChecker.isEmpty(classroom_id)
               )
             })
           })

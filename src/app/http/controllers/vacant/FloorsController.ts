@@ -47,7 +47,6 @@ export default class FloorsController {
 
       const floor_list: FloorInfo[] = []
       const promise_list: Promise<boolean>[][] = [] // empty check promise list
-      const empty_checker = new EmptyClassroomChecker()
 
       // data formatting
       floors.forEach((floor: FloorDoc) => {
@@ -56,7 +55,7 @@ export default class FloorsController {
         // add empty classroom checking promise to array
         floor.classrooms.forEach((classroom_id: string) => {
           promise_list[promise_list.length - 1].push(
-            empty_checker.isEmpty(classroom_id)
+            EmptyClassroomChecker.isEmpty(classroom_id)
           )
         })
 
