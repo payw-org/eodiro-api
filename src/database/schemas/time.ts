@@ -8,13 +8,13 @@
 import mongoose, { Document } from 'mongoose'
 
 export interface TimeDoc extends Document {
-  day: string
+  day: number
   start: string
   end: string
 }
 
 const timeSchema = new mongoose.Schema({
-  day: { type: String, required: true }, // ex. MON
+  day: { type: Number, required: true }, // SUN - SAT => 0 - 6
   start: { type: String, required: true }, // ex. 3:30pm -> 1530
   end: { type: String, required: true }
 })
