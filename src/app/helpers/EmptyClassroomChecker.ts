@@ -13,9 +13,13 @@ export default class EmptyClassroomChecker {
    * Checks whether a classroom is empty.
    *
    * @param classroom_id
+   * @param date
    */
-  public static async isEmpty(classroom_id: string): Promise<boolean> {
-    const curr_date = this.getCurrentDate()
+  public static async isEmpty(
+    classroom_id: string,
+    date: Date = new Date()
+  ): Promise<boolean> {
+    const converted_date = this.convertDate(date)
 
     // find all lectures which time is matched with current time
     const classroom = <ClassroomDoc>await Classroom.findById(classroom_id, {
@@ -28,9 +32,9 @@ export default class EmptyClassroomChecker {
         path: 'class',
         select: 'times -_id',
         match: {
-          'times.day': curr_date.day,
-          'times.start': { $lte: curr_date.time },
-          'times.end': { $gte: curr_date.time }
+          'times.day': converted_date.day,
+          'times.start': { $lte: converted_date.time },
+          'times.end': { $gte: converted_date.time }
         }
       }
     })
@@ -43,8 +47,11 @@ export default class EmptyClassroomChecker {
       if (lecture.class !== null) {
         let time = (<ClassDoc>lecture.class).times[lecture.order]
 
-        if (time.day == curr_date.day) {
-          if (time.start <= curr_date.time && time.end >= curr_date.time) {
+        if (time.day == converted_date.day) {
+          if (
+            time.start <= converted_date.time &&
+            time.end >= converted_date.time
+          ) {
             is_empty = false
             return
           }
@@ -56,13 +63,17 @@ export default class EmptyClassroomChecker {
   }
 
   /**
-   * Get current local date as comparable form.
+   * Localize GMT+0 date and convert as comparable form.
+   *
+   * @param date
    */
-  private static getCurrentDate(): CurrentDate {
+  private static convertDate(date: Date): CurrentDate {
+    // localize
     const local_date = new Date(
-      new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' })
+      date.toLocaleString('en-US', { timeZone: 'Asia/Seoul' })
     )
 
+    // convert
     let day = local_date.getDay()
     let hour = local_date
       .getHours()
