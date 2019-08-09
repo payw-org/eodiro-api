@@ -5,7 +5,7 @@ import { LectureDoc } from 'Database/schemas/lecture'
 import { ClassDoc } from 'Database/schemas/class'
 
 interface CurrentDate {
-  day: string
+  day: number
   time: string
 }
 
@@ -54,10 +54,7 @@ export default class EmptyClassroomChecker {
       new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' })
     )
 
-    let day = local_date
-      .toString()
-      .split(' ')[0]
-      .toUpperCase()
+    let day = local_date.getDay()
     let hour = local_date
       .getHours()
       .toString()

@@ -3,10 +3,10 @@ import Floor from 'Database/models/floor'
 import logger from 'Configs/log'
 import { FloorDoc } from 'Database/schemas/floor'
 import { ClassroomDoc } from 'Database/schemas/classroom'
-import { TimeDoc } from 'Database/schemas/time'
 import { LectureDoc } from 'Database/schemas/lecture'
 import { ClassDoc } from 'Database/schemas/class'
 import LecturesComparator from 'Helpers/LecturesComparator'
+import { TimeDoc } from 'Database/schemas/time'
 
 export interface LectureInfo {
   name: string
