@@ -10,7 +10,7 @@ interface CurrentDate {
 
 export default class EmptyClassroomChecker {
   /**
-   * Checks whether a classroom is empty.
+   * Checks whether a classroom is empty at date.
    *
    * @param classroom_id
    * @param date
@@ -63,23 +63,17 @@ export default class EmptyClassroomChecker {
   }
 
   /**
-   * Localize GMT+0 date and convert as comparable form.
+   * Convert date as comparable form.
    *
    * @param date
    */
   private static convertDate(date: Date): CurrentDate {
-    // localize
-    const local_date = new Date(
-      date.toLocaleString('en-US', { timeZone: 'Asia/Seoul' })
-    )
-
-    // convert
-    let day = local_date.getDay()
-    let hour = local_date
+    let day = date.getDay()
+    let hour = date
       .getHours()
       .toString()
       .padStart(2, '0')
-    let min = local_date
+    let min = date
       .getMinutes()
       .toString()
       .padStart(2, '0')
