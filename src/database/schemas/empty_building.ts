@@ -5,6 +5,8 @@
  * @copyright 2019 Payw
  */
 
+import mongoose, { Document } from 'mongoose'
+
 import emptyFacilitySchema, {
   EmptyFacilityDoc
 } from 'Database/schemas/empty_facility'
@@ -13,7 +15,10 @@ export interface EmptyBuildingDoc extends EmptyFacilityDoc {
   floors: EmptyFacilityDoc[]
 }
 
-const emptyBuildingSchema = emptyFacilitySchema.add({
+const emptyBuildingSchema = new mongoose.Schema({
+  id: { type: String, required: true }, // facility document id
+  empty: { type: Number, required: true }, // empty classroom count
+  total: { type: Number, required: true }, // total classroom count
   floors: [{ type: emptyFacilitySchema, required: true }] // empty classroom count info of floors
 })
 
