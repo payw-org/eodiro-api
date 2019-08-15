@@ -1,8 +1,11 @@
 import { FloorDoc } from 'Database/schemas/floor'
 import logger from 'Configs/log'
-import EmptyClassroomChecker from 'Helpers/EmptyClassroomChecker'
 import { BuildingDoc } from 'Database/schemas/building'
 import Building from 'Database/models/building'
+import Classroom from 'Database/models/classroom'
+import { ClassroomDoc } from 'Database/schemas/classroom'
+import { LectureDoc } from 'Database/schemas/lecture'
+import { ClassDoc } from 'Database/schemas/class'
 
 interface EmptyInfo {
   id: string
@@ -14,13 +17,18 @@ interface BuildingEmptyInfo extends EmptyInfo {
   floors: EmptyInfo[]
 }
 
-export default class EmptyClassroomCounter {
+interface CurrentDate {
+  day: number
+  time: string
+}
+
+export default class EmptyClassroomHelper {
   /**
    * Count empty classroom number of all buildings and floors.
    *
    * @param date
    */
-  public static async count(date: Date): Promise<BuildingEmptyInfo[]> {
+  public static async countAll(date: Date): Promise<BuildingEmptyInfo[]> {
     // find all buildings which has activated classrooms
     const buildings = <BuildingDoc[]>await Building.find(
       { floors: { $exists: true, $not: { $size: 0 } } },
@@ -59,10 +67,7 @@ export default class EmptyClassroomCounter {
         promises_3d[i][j] = [] // add promise list for a floor
         floor.classrooms.forEach((classroom_id: string, k: number) => {
           // add empty check promise to array
-          promises_3d[i][j][k] = EmptyClassroomChecker.isEmpty(
-            classroom_id,
-            date
-          )
+          promises_3d[i][j][k] = this.isEmpty(classroom_id, date)
         })
 
         // add total classroom count
@@ -97,5 +102,77 @@ export default class EmptyClassroomCounter {
     })
 
     return Promise.resolve(building_empty_list)
+  }
+
+  /**
+   * Checks whether a classroom is empty at date.
+   *
+   * @param classroom_id
+   * @param date
+   */
+  public static async isEmpty(
+    classroom_id: string,
+    date: Date = new Date()
+  ): Promise<boolean> {
+    const converted_date = this.convertDate(date)
+
+    // find all lectures which time is matched with current time
+    const classroom = <ClassroomDoc>await Classroom.findById(classroom_id, {
+      _id: 0,
+      lectures: 1
+    }).populate({
+      path: 'lectures',
+      select: 'class order -_id',
+      populate: {
+        path: 'class',
+        select: 'times -_id',
+        match: {
+          'times.day': converted_date.day,
+          'times.start': { $lte: converted_date.time },
+          'times.end': { $gte: converted_date.time }
+        }
+      }
+    })
+
+    const lectures = <LectureDoc[]>classroom.lectures
+    let is_empty = true
+
+    // make sure the classroom is empty
+    lectures.forEach((lecture: LectureDoc) => {
+      if (lecture.class !== null) {
+        let time = (<ClassDoc>lecture.class).times[lecture.order]
+
+        if (time.day == converted_date.day) {
+          if (
+            time.start <= converted_date.time &&
+            time.end >= converted_date.time
+          ) {
+            is_empty = false
+            return
+          }
+        }
+      }
+    })
+
+    return Promise.resolve(is_empty)
+  }
+
+  /**
+   * Convert date as comparable form.
+   *
+   * @param date
+   */
+  private static convertDate(date: Date): CurrentDate {
+    let day = date.getDay()
+    let hour = date
+      .getHours()
+      .toString()
+      .padStart(2, '0')
+    let min = date
+      .getMinutes()
+      .toString()
+      .padStart(2, '0')
+
+    return { day: day, time: hour + min }
   }
 }
