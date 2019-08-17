@@ -1,7 +1,10 @@
+import dotenv from 'dotenv'
 import server_config from 'Configs/server'
 import DBServiceProvider from 'Providers/DBServiceProvider'
 import RouteServiceProvider from 'Providers/RouteServiceProvider'
 import ScheduleServiceProvider from 'Providers/ScheduleServiceProvider'
+
+dotenv.config()
 
 const db_provider = new DBServiceProvider()
 const schedule_provider = new ScheduleServiceProvider()
