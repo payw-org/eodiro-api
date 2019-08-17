@@ -13,7 +13,5 @@ export default class DBServiceProvider {
   public async boot(): Promise<void> {
     await this.dbConnector.connect()
     await this.dbInitializer.initialize()
-
-    return Promise.resolve()
   }
 }
