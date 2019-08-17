@@ -101,7 +101,7 @@ export default class EmptyClassroomHelper {
       })
     })
 
-    return Promise.resolve(building_empty_list)
+    return building_empty_list
   }
 
   /**
@@ -154,7 +154,7 @@ export default class EmptyClassroomHelper {
       }
     })
 
-    return Promise.resolve(is_empty)
+    return is_empty
   }
 
   /**

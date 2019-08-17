@@ -20,7 +20,5 @@ export default class DBConnector {
         process.exit(0)
       })
     })
-
-    return Promise.resolve()
   }
 }
