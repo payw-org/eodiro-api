@@ -3,13 +3,13 @@ import Building from 'Database/models/building'
 import logger from 'Configs/log'
 import { BuildingDoc } from 'Database/schemas/building'
 import { FloorDoc } from 'Database/schemas/floor'
-import EmptyClassroomChecker from 'Helpers/EmptyClassroomChecker'
+import EmptyCount from 'Database//models/empty_count'
 import FloorsComparator from 'Helpers/FloorsComparator'
 
 export interface FloorInfo {
   number: string
-  empty_classroom: number
-  total_classroom: number
+  empty: number
+  total: number
 }
 
 export default class FloorsController {
@@ -31,7 +31,7 @@ export default class FloorsController {
         }
       ).populate({
         path: 'floors',
-        select: 'number classrooms -_id'
+        select: 'number'
       })
 
       const floors = <FloorDoc[]>building.floors
@@ -46,40 +46,20 @@ export default class FloorsController {
       }
 
       const floor_list: FloorInfo[] = []
-      const promise_list: Promise<boolean>[][] = [] // empty check promise list
-      const empty_checker = new EmptyClassroomChecker()
 
       // data formatting
-      floors.forEach((floor: FloorDoc) => {
-        promise_list.push([]) // add promise list for the floor
-
-        // add empty classroom checking promise to array
-        floor.classrooms.forEach((classroom_id: string) => {
-          promise_list[promise_list.length - 1].push(
-            empty_checker.isEmpty(classroom_id)
-          )
-        })
+      for (const floor of floors) {
+        const count = await EmptyCount.getCurrentCountOfFloor(
+          bldg_id,
+          floor._id
+        )
 
         floor_list.push({
           number: floor.number,
-          empty_classroom: 0,
-          total_classroom: promise_list[promise_list.length - 1].length
+          empty: count.empty,
+          total: count.total
         })
-      })
-
-      // asynchronously resolve all empty classroom checking promise
-      let empty_lists = await Promise.all(
-        promise_list.map(Promise.all, Promise)
-      )
-
-      // count empty classroom
-      empty_lists.forEach((empty_list, index) => {
-        empty_list.forEach(is_empty => {
-          if (is_empty) {
-            floor_list[index].empty_classroom++
-          }
-        })
-      })
+      }
 
       // sort by descending order of floor number
       floor_list.sort(FloorsComparator.comparator())

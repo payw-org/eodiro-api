@@ -22,4 +22,10 @@ router.use('/campuses/:vendor/vacant', vacant_router)
 // show campus list
 router.get('/campuses', LocaleMiddleware.handler(), CampusesController.index())
 
+// router.get('/test', async (req, res) => {
+//   res.json({
+//     result: 'good'
+//   })
+// })
+
 export default router
