@@ -1,7 +1,5 @@
-import { server_private } from './private'
-
 const config = {
-  port: server_private.node_port
+  port: process.env.APP_PORT
 }
 
 export default config

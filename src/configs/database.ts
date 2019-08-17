@@ -1,23 +1,15 @@
-import { db_private } from './private'
-
-let username = 'eodiro'
-let password = 'weloveeodiro2019'
-let host = 'localhost'
-let port = 27017
-let database = db_private.db_name
-
 const config = {
   uri:
     'mongodb://' +
-    username +
+    process.env.DB_USERNAME +
     ':' +
-    password +
+    process.env.DB_PASSWORD +
     '@' +
-    host +
+    process.env.DB_HOST +
     ':' +
-    port +
+    process.env.DB_PORT +
     '/' +
-    database
+    process.env.DB_DATABASE
 }
 
 export default config
