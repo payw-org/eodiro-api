@@ -24,8 +24,19 @@ interface EmptyCountModel extends Model<EmptyCountDoc> {
   deletePrevCounts(): Promise<void>
 }
 
-// set tick minute unit
-export const tick_min = 5
+/**
+ * set config data
+ */
+const tick_min = 5 // every 5 minutes
+// MON - SAT, 7:55AM - 24:05AM
+const s_day = 1
+const e_day = 6
+const s_hour = 7
+const e_hour = 0
+const s_min = 55
+const e_min = 5
+
+export { tick_min, s_day, s_hour, s_min, e_day, e_hour, e_min }
 
 /**
  * Calculate and save current tick time's empty classroom count.
@@ -61,13 +72,41 @@ emptyCountSchema.statics.saveNextCount = async function(): Promise<void> {
 emptyCountSchema.statics.getCurrentCountOfBuilding = async function(
   building_id: string
 ): Promise<EmptyBuildingDoc> {
-  const count = <EmptyCountDoc>await this.findOne(
-    {
-      time: TimeManager.getCurrentTick(tick_min),
-      'buildings.id': building_id
-    },
-    { _id: 0, 'buildings.$': 1 }
-  )
+  const current_tick = TimeManager.getCurrentTick(tick_min)
+  let count
+
+  // activation time
+  if (
+    TimeManager.isDateInRange(
+      new Date(),
+      s_day,
+      e_day,
+      s_hour,
+      e_hour,
+      s_min,
+      e_min
+    )
+  ) {
+    // get current tick time's empty classroom count
+    count = <EmptyCountDoc>await this.findOne(
+      {
+        time: current_tick,
+        'buildings.id': building_id
+      },
+      { _id: 0, 'buildings.$': 1 }
+    )
+  }
+  // inactivation time
+  else {
+    // get last tick time's empty classroom count
+    count = <EmptyCountDoc>await this.findOne(
+      {
+        time: { $lte: current_tick }, // not future
+        'buildings.id': building_id
+      },
+      { _id: 0, 'buildings.$': 1 }
+    ).sort('-time')
+  }
 
   return count.buildings[0]
 }
@@ -82,20 +121,12 @@ emptyCountSchema.statics.getCurrentCountOfFloor = async function(
   building_id: string,
   floor_id: string
 ): Promise<EmptyFacilityDoc> {
-  const count = <EmptyCountDoc>await this.findOne(
-    {
-      time: TimeManager.getCurrentTick(tick_min),
-      'buildings.id': building_id
-    },
-    { _id: 0, 'buildings.$': 1 }
-  )
-
-  const floors = count.buildings[0].floors
-  const floor = floors.find(elem => {
+  const building_count = await this.getCurrentCountOfBuilding(building_id)
+  const floor_count = building_count.floors.find((elem: EmptyFacilityDoc) => {
     return elem.id == floor_id
   })
 
-  return floor
+  return floor_count
 }
 
 /**
