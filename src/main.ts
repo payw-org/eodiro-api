@@ -4,6 +4,9 @@ import DBServiceProvider from 'Providers/DBServiceProvider'
 import RouteServiceProvider from 'Providers/RouteServiceProvider'
 import ScheduleServiceProvider from 'Providers/ScheduleServiceProvider'
 
+/**
+ * Boot eodiro api app.
+ */
 async function bootApp(): Promise<void> {
   const dbProvider = new DBServiceProvider()
   const scheduleProvider = new ScheduleServiceProvider()
