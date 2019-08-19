@@ -2,7 +2,6 @@
 .DS_Store
 node_modules
 yarn.lock
-pm2.json
 build
 logs
 src/resources/scrap
