@@ -27,7 +27,16 @@ module.exports = {
     SharedArrayBuffer: 'readonly'
   },
   rules: {
-    'space-before-function-paren': ['error', 'never'],
+    'space-before-function-paren': [
+      'error',
+      {
+        anonymous: 'never',
+        named: 'never',
+        asyncArrow: 'always'
+      }
+    ],
+    indent: ['error', 2, { ignoredNodes: ['ConditionalExpression'] }],
+    'require-atomic-updates': 'off', // See https://github.com/eslint/eslint/issues/11899
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
