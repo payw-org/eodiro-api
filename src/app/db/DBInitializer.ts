@@ -14,8 +14,8 @@ export default class DBInitializer {
    */
   public async initialize(): Promise<void> {
     // check if collection about vacant is empty, seed data.
-    let univ_count = await University.estimatedDocumentCount()
-    if (univ_count === 0) {
+    const univCount = await University.estimatedDocumentCount()
+    if (univCount === 0) {
       await this.dbSeeder.seedMetadata()
       await this.dbSeeder.seedClasses()
     }

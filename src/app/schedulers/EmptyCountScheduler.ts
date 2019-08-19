@@ -1,13 +1,14 @@
 import schedule from 'node-schedule'
 import EmptyCount, {
-  e_day,
-  e_hour,
-  e_min,
-  s_day,
-  s_hour,
-  s_min
+  eDay,
+  eHour,
+  eMin,
+  sDay,
+  sHour,
+  sMin,
+  tickMin
 } from 'Database/models/empty_count'
-import { tick_min } from 'Database/models/empty_count'
+
 import TimeManager from 'Helpers/TimeManager'
 
 export default class EmptyCountScheduler {
@@ -25,22 +26,22 @@ export default class EmptyCountScheduler {
    */
   private static scheduleSaveJob(): void {
     const rule = new schedule.RecurrenceRule()
-    rule.minute = new schedule.Range(0, 59, tick_min)
+    rule.minute = new schedule.Range(0, 59, tickMin)
     rule.second = 30
 
-    schedule.scheduleJob(rule, async () => {
+    schedule.scheduleJob(rule, () => {
       if (
         TimeManager.isDateInRange(
           new Date(),
-          s_day,
-          e_day,
-          s_hour,
-          e_hour,
-          s_min,
-          e_min
+          sDay,
+          eDay,
+          sHour,
+          eHour,
+          sMin,
+          eMin
         )
       ) {
-        await EmptyCount.saveNextCount()
+        EmptyCount.saveNextCount().then()
       }
     })
   }
@@ -51,22 +52,22 @@ export default class EmptyCountScheduler {
    */
   private static scheduleDeleteJob(): void {
     const rule = new schedule.RecurrenceRule()
-    rule.minute = new schedule.Range(0, 59, tick_min)
+    rule.minute = new schedule.Range(0, 59, tickMin)
     rule.second = 15
 
-    schedule.scheduleJob(rule, async () => {
+    schedule.scheduleJob(rule, () => {
       if (
         TimeManager.isDateInRange(
           new Date(),
-          s_day,
-          e_day,
-          s_hour,
-          e_hour,
-          s_min,
-          e_min
+          sDay,
+          eDay,
+          sHour,
+          eHour,
+          sMin,
+          eMin
         )
       ) {
-        await EmptyCount.deletePrevCounts()
+        EmptyCount.deletePrevCounts().then()
       }
     })
   }

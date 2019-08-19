@@ -1,4 +1,4 @@
-import { SimpleHandler } from 'Http/RequestHandler'
+import { Response, SimpleHandler } from 'Http/RequestHandler'
 import Floor from 'Database/models/floor'
 import logger from 'Configs/log'
 import { FloorDoc } from 'Database/schemas/floor'
@@ -24,12 +24,12 @@ export default class ClassroomsController {
    * Get a listing of the classroom.
    */
   public static index(): SimpleHandler {
-    return async (req, res) => {
-      let floor_id = res.locals.floor_id
+    return async (req, res): Promise<Response> => {
+      const floorId = res.locals.floorId
 
       // find all classroom document of the floor
-      const floor = <FloorDoc>await Floor.findById(
-        floor_id,
+      const floor = (await Floor.findById(
+        floorId,
         { _id: 0, classrooms: 1 },
         err => {
           if (err) {
@@ -48,9 +48,9 @@ export default class ClassroomsController {
             select: '-times._id -_id'
           }
         }
-      })
+      })) as FloorDoc
 
-      const classrooms = <ClassroomDoc[]>floor.classrooms
+      const classrooms = floor.classrooms as ClassroomDoc[]
 
       // if classroom list not exist
       if (classrooms.length === 0) {
@@ -61,18 +61,18 @@ export default class ClassroomsController {
         })
       }
 
-      let lecture_list: LectureInfo[]
-      const classroom_list: ClassroomInfo[] = []
+      let lectureList: LectureInfo[]
+      const classroomList: ClassroomInfo[] = []
 
       // data formatting
       classrooms.forEach((classroom: ClassroomDoc) => {
-        const lectures = <LectureDoc[]>classroom.lectures
-        lecture_list = []
+        const lectures = classroom.lectures as LectureDoc[]
+        lectureList = []
 
         lectures.forEach((lecture: LectureDoc) => {
-          const cls = <ClassDoc>lecture.class
+          const cls = lecture.class as ClassDoc
 
-          lecture_list.push({
+          lectureList.push({
             name: cls.name,
             instructor: cls.instructor,
             time: cls.times[lecture.order]
@@ -80,16 +80,16 @@ export default class ClassroomsController {
         })
 
         // sort by lecture time flow
-        lecture_list.sort(LecturesComparator.comparator())
+        lectureList.sort(LecturesComparator.comparator())
 
-        classroom_list.push({
+        classroomList.push({
           number: classroom.number,
-          lectures: lecture_list
+          lectures: lectureList
         })
       })
 
       return res.status(200).json({
-        classrooms: classroom_list
+        classrooms: classroomList
       })
     }
   }

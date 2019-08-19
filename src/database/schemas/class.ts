@@ -10,7 +10,7 @@ import locationSchema, { LocationDoc } from './location'
 import timeSchema, { TimeDoc } from './time'
 
 export interface ClassDoc extends Document {
-  class_id: string
+  classId: string
   name: string
   instructor: string
   locations: LocationDoc[]
@@ -18,7 +18,7 @@ export interface ClassDoc extends Document {
 }
 
 const classSchema = new mongoose.Schema({
-  class_id: { type: String, required: true },
+  classId: { type: String, required: true },
   name: { type: String, required: true },
   instructor: { type: String, default: '' },
   locations: [{ type: locationSchema, required: true }],

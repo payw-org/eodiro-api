@@ -1,18 +1,18 @@
 import dotenv from 'dotenv'
-import server_config from 'Configs/server'
+import serverConfig from 'Configs/server'
 import DBServiceProvider from 'Providers/DBServiceProvider'
 import RouteServiceProvider from 'Providers/RouteServiceProvider'
 import ScheduleServiceProvider from 'Providers/ScheduleServiceProvider'
 
 dotenv.config()
 
-const db_provider = new DBServiceProvider()
-const schedule_provider = new ScheduleServiceProvider()
-const route_provider = new RouteServiceProvider()
+const dbProvider = new DBServiceProvider()
+const scheduleProvider = new ScheduleServiceProvider()
+const routeProvider = new RouteServiceProvider()
 
 // boot all service provider after database is set
-db_provider.boot().then(() => {
-  schedule_provider.boot()
-  const app = route_provider.boot()
-  app.listen(server_config.port)
+dbProvider.boot().then(() => {
+  scheduleProvider.boot()
+  const app = routeProvider.boot()
+  app.listen(serverConfig.port)
 })

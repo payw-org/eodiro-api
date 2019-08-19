@@ -1,4 +1,4 @@
-import { SimpleHandler } from 'Http/RequestHandler'
+import { Response, SimpleHandler } from 'Http/RequestHandler'
 import Building from 'Database/models/building'
 import logger from 'Configs/log'
 import { BuildingDoc } from 'Database/schemas/building'
@@ -17,12 +17,12 @@ export default class FloorsController {
    * Get a listing of the floor.
    */
   public static index(): SimpleHandler {
-    return async (req, res) => {
-      let bldg_id = res.locals.bldg_id
+    return async (req, res): Promise<Response> => {
+      const bldgId = res.locals.bldgId
 
       // find all floor document of the building
-      const building = <BuildingDoc>await Building.findById(
-        bldg_id,
+      const building = (await Building.findById(
+        bldgId,
         { _id: 0, floors: 1 },
         err => {
           if (err) {
@@ -32,9 +32,9 @@ export default class FloorsController {
       ).populate({
         path: 'floors',
         select: 'number'
-      })
+      })) as BuildingDoc
 
-      const floors = <FloorDoc[]>building.floors
+      const floors = building.floors as FloorDoc[]
 
       // if floor list not exist
       if (floors.length === 0) {
@@ -45,16 +45,13 @@ export default class FloorsController {
         })
       }
 
-      const floor_list: FloorInfo[] = []
+      const floorList: FloorInfo[] = []
 
       // data formatting
       for (const floor of floors) {
-        const count = await EmptyCount.getCurrentCountOfFloor(
-          bldg_id,
-          floor._id
-        )
+        const count = await EmptyCount.getCurrentCountOfFloor(bldgId, floor._id)
 
-        floor_list.push({
+        floorList.push({
           number: floor.number,
           empty: count.empty,
           total: count.total
@@ -62,10 +59,10 @@ export default class FloorsController {
       }
 
       // sort by descending order of floor number
-      floor_list.sort(FloorsComparator.comparator())
+      floorList.sort(FloorsComparator.comparator())
 
       return res.status(200).json({
-        floors: floor_list
+        floors: floorList
       })
     }
   }

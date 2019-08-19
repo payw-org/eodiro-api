@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import db_config from 'Configs/database'
+import dbConfig from 'Configs/database'
 import logger from 'Configs/log'
 
 export default class DBConnector {
@@ -8,7 +8,7 @@ export default class DBConnector {
       logger.info('Mongoose default connection has occured ' + err + ' error')
     })
 
-    await mongoose.connect(db_config.uri, {
+    await mongoose.connect(dbConfig.uri, {
       useNewUrlParser: true
     })
 

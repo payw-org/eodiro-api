@@ -3,6 +3,7 @@ import DBInitializer from 'DB/DBInitializer'
 
 export default class DBServiceProvider {
   private dbConnector: DBConnector
+
   private dbInitializer: DBInitializer
 
   public constructor() {

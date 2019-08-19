@@ -1,8 +1,8 @@
 import { GlobalNameDoc } from 'Database/schemas/global_name'
-import metadata_seoul_json from 'Resources/metadata/cau_seoul.json'
-import metadata_anseong_json from 'Resources/metadata/cau_anseong.json'
-import classes_seoul_json from 'Resources/classes/cau_seoul.json'
-import classes_anseong_json from 'Resources/classes/cau_anseong.json'
+import metadataSeoulJSON from 'Resources/metadata/cau_seoul.json'
+import metadataAnseongJSON from 'Resources/metadata/cau_anseong.json'
+import classesSeoulJSON from 'Resources/classes/cau_seoul.json'
+import classesAnseongJSON from 'Resources/classes/cau_anseong.json'
 import University from 'Database/models/university'
 import Building from 'Database/models/building'
 import Class from 'Database/models/class'
@@ -11,7 +11,6 @@ import { ClassDoc } from 'Database/schemas/class'
 import Floor from 'Database/models/floor'
 import Classroom from 'Database/models/classroom'
 import Lecture from 'Database/models/lecture'
-import { UniversityDoc } from 'Database/schemas/university'
 
 interface ClassesJSON {
   vendor: string
@@ -34,17 +33,17 @@ export default class DBSeeder {
   /**
    * Seed(resource) data for metadata
    */
-  private metadata_seed: UnivMetaJSON[] = [
-    <UnivMetaJSON>metadata_seoul_json,
-    <UnivMetaJSON>metadata_anseong_json
+  private metadataSeed: UnivMetaJSON[] = [
+    metadataSeoulJSON as UnivMetaJSON,
+    metadataAnseongJSON as UnivMetaJSON
   ]
 
   /**
    * Seed(resource) data for classes
    */
-  private classes_seed: ClassesJSON[] = [
-    <ClassesJSON>classes_seoul_json,
-    <ClassesJSON>classes_anseong_json
+  private classesSeed: ClassesJSON[] = [
+    classesSeoulJSON as ClassesJSON,
+    classesAnseongJSON as ClassesJSON
   ]
 
   /**
@@ -53,7 +52,7 @@ export default class DBSeeder {
   public async seedMetadata(): Promise<void> {
     // asynchronously seed metadata
     await Promise.all(
-      this.metadata_seed.map(async (seed: UnivMetaJSON) => {
+      this.metadataSeed.map(async (seed: UnivMetaJSON) => {
         // create university
         const university = await University.create({
           name: seed.name,
@@ -64,13 +63,13 @@ export default class DBSeeder {
         // create buildings
         const buildings = await Building.insertMany(seed.buildings)
         // get building id list
-        let buildings_ids = buildings.map(bldg => {
+        const buildingsIds = buildings.map(bldg => {
           return bldg._id
         })
 
         // link university to buildings
         await Building.updateMany(
-          { _id: { $in: buildings_ids } },
+          { _id: { $in: buildingsIds } },
           { university: university._id }
         )
 
@@ -88,18 +87,16 @@ export default class DBSeeder {
   public async seedClasses(): Promise<void> {
     // asynchronously seed classes
     await Promise.all(
-      this.classes_seed.map(async (seed: ClassesJSON) => {
+      this.classesSeed.map(async (seed: ClassesJSON) => {
         try {
           // create classes
-          const classes = <ClassDoc[]>await Class.insertMany(seed.classes)
+          const classes = (await Class.insertMany(seed.classes)) as ClassDoc[]
 
           // link classes to university
-          const university = <UniversityDoc>(
-            await University.findOneAndUpdate(
-              { vendor: seed.vendor },
-              { classes: classes },
-              { new: true }
-            )
+          await University.findOneAndUpdate(
+            { vendor: seed.vendor },
+            { classes: classes },
+            { new: true }
           )
         } catch (err) {
           logger.error('Class save error: ' + err)
@@ -107,12 +104,14 @@ export default class DBSeeder {
       })
     )
 
-    const classes = <ClassDoc[]>await Class.find()
+    const classes = (await Class.find()) as ClassDoc[]
     // create floors, classrooms, lectures
     for (const cls of classes) {
       for (let i = 0; i < cls.locations.length; i++) {
-        let location = cls.locations[i]
-        let floor_num = location.room.match(/(?:[Bb]|)\d+(?=\d\d)/)[0]
+        const location = cls.locations[i]
+
+        const floorRegexp = /(?:[Bb]|)\d+(?=\d\d)/
+        const floorNum = floorRegexp.exec(location.room)[0]
 
         // find class building
         const building = await Building.findOne({
@@ -122,8 +121,8 @@ export default class DBSeeder {
         // find class floor
         // if not exist, create floor
         const floor = await Floor.findOneAndUpdate(
-          { building: building._id, number: floor_num },
-          { building: building._id, number: floor_num },
+          { building: building._id, number: floorNum },
+          { building: building._id, number: floorNum },
           { upsert: true, new: true }
         )
 

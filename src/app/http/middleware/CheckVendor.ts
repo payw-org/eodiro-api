@@ -1,4 +1,4 @@
-import { NextHandler } from 'Http/RequestHandler'
+import { Response, NextHandler } from 'Http/RequestHandler'
 import University from 'Database/models/university'
 import logger from 'Configs/log'
 
@@ -7,8 +7,8 @@ export default class CheckVendor {
    * Check if vendor is not exist and get university id.
    */
   public static handler(): NextHandler {
-    return async (req, res, next) => {
-      let vendor = req.params.vendor
+    return async (req, res, next): Promise<Response | void> => {
+      const vendor = req.params.vendor
 
       // Find university id
       const university = await University.findOne(
@@ -31,7 +31,7 @@ export default class CheckVendor {
       }
 
       // pass the university document id
-      res.locals.univ_id = university._id
+      res.locals.univId = university._id
 
       return next()
     }
