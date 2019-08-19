@@ -9,10 +9,10 @@ export default class FloorsComparator {
    */
   public static comparator(): Comparator {
     return (a, b) => {
-      let num_a = this.floorToNumber(a.number)
-      let num_b = this.floorToNumber(b.number)
+      const numA = this.floorToNumber(a.number)
+      const numB = this.floorToNumber(b.number)
 
-      return num_a > num_b ? -1 : num_a < num_b ? 1 : 0
+      return numA > numB ? -1 : numA < numB ? 1 : 0
     }
   }
 

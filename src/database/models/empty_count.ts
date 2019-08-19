@@ -16,10 +16,10 @@ import { EmptyFacilityDoc } from 'Database/schemas/empty_facility'
 interface EmptyCountModel extends Model<EmptyCountDoc> {
   saveCurrentCount(): Promise<void>
   saveNextCount(): Promise<void>
-  getCurrentCountOfBuilding(building_id: string): Promise<EmptyBuildingDoc>
+  getCurrentCountOfBuilding(buildingId: string): Promise<EmptyBuildingDoc>
   getCurrentCountOfFloor(
-    building_id: string,
-    floor_id: string
+    buildingId: string,
+    floorId: string
   ): Promise<EmptyFacilityDoc>
   deletePrevCounts(): Promise<void>
 }
@@ -27,27 +27,27 @@ interface EmptyCountModel extends Model<EmptyCountDoc> {
 /**
  * set config data
  */
-const tick_min = 5 // every 5 minutes
+const tickMin = 5 // every 5 minutes
 // MON - SAT, 7:55AM - 24:05AM
-const s_day = 1
-const e_day = 6
-const s_hour = 7
-const e_hour = 0
-const s_min = 55
-const e_min = 5
+const sDay = 1
+const eDay = 6
+const sHour = 7
+const eHour = 0
+const sMin = 55
+const eMin = 5
 
-export { tick_min, s_day, s_hour, s_min, e_day, e_hour, e_min }
+export { tickMin, sDay, sHour, sMin, eDay, eHour, eMin }
 
 /**
  * Calculate and save current tick time's empty classroom count.
  */
 emptyCountSchema.statics.saveCurrentCount = async function(): Promise<void> {
-  const current_tick = TimeManager.getCurrentTick(tick_min)
+  const currentTick = TimeManager.getCurrentTick(tickMin)
 
   // if not exist
-  if ((await this.countDocuments({ time: current_tick })) === 0) {
-    const count_info = await EmptyClassroomHelper.countAll(current_tick)
-    await this.create({ time: current_tick, buildings: count_info })
+  if ((await this.countDocuments({ time: currentTick })) === 0) {
+    const countInfo = await EmptyClassroomHelper.countAll(currentTick)
+    await this.create({ time: currentTick, buildings: countInfo })
   }
 }
 
@@ -55,57 +55,47 @@ emptyCountSchema.statics.saveCurrentCount = async function(): Promise<void> {
  * Calculate and save next tick time's empty classroom count.
  */
 emptyCountSchema.statics.saveNextCount = async function(): Promise<void> {
-  const next_tick = TimeManager.getNextTick(tick_min)
+  const nextTick = TimeManager.getNextTick(tickMin)
 
   // if not exist
-  if ((await this.countDocuments({ time: next_tick })) === 0) {
-    const count_info = await EmptyClassroomHelper.countAll(next_tick)
-    await this.create({ time: next_tick, buildings: count_info })
+  if ((await this.countDocuments({ time: nextTick })) === 0) {
+    const countInfo = await EmptyClassroomHelper.countAll(nextTick)
+    await this.create({ time: nextTick, buildings: countInfo })
   }
 }
 
 /**
  * Return current tick time's empty classroom count for a building.
  *
- * @param building_id
+ * @param buildingId
  */
 emptyCountSchema.statics.getCurrentCountOfBuilding = async function(
-  building_id: string
+  buildingId: string
 ): Promise<EmptyBuildingDoc> {
-  const current_tick = TimeManager.getCurrentTick(tick_min)
+  const currentTick = TimeManager.getCurrentTick(tickMin)
   let count
 
   // activation time
   if (
-    TimeManager.isDateInRange(
-      new Date(),
-      s_day,
-      e_day,
-      s_hour,
-      e_hour,
-      s_min,
-      e_min
-    )
+    TimeManager.isDateInRange(new Date(), sDay, eDay, sHour, eHour, sMin, eMin)
   ) {
     // get current tick time's empty classroom count
-    count = <EmptyCountDoc>await this.findOne(
+    count = (await this.findOne(
       {
-        time: current_tick,
-        'buildings.id': building_id
+        time: currentTick,
+        'buildings.id': buildingId
       },
       { _id: 0, 'buildings.$': 1 }
-    )
-  }
-  // inactivation time
-  else {
+    )) as EmptyCountDoc
+  } else {
     // get last tick time's empty classroom count
-    count = <EmptyCountDoc>await this.findOne(
+    count = (await this.findOne(
       {
-        time: { $lte: current_tick }, // not future
-        'buildings.id': building_id
+        time: { $lte: currentTick }, // not future
+        'buildings.id': buildingId
       },
       { _id: 0, 'buildings.$': 1 }
-    ).sort('-time')
+    ).sort('-time')) as EmptyCountDoc
   }
 
   return count.buildings[0]
@@ -114,33 +104,31 @@ emptyCountSchema.statics.getCurrentCountOfBuilding = async function(
 /**
  * Return current tick time's empty classroom count for a floor.
  *
- * @param building_id
- * @param floor_id
+ * @param buildingId
+ * @param floorId
  */
 emptyCountSchema.statics.getCurrentCountOfFloor = async function(
-  building_id: string,
-  floor_id: string
+  buildingId: string,
+  floorId: string
 ): Promise<EmptyFacilityDoc> {
-  const building_count = await this.getCurrentCountOfBuilding(building_id)
-  const floor_count = building_count.floors.find((elem: EmptyFacilityDoc) => {
-    return elem.id == floor_id
+  const buildingCount = await this.getCurrentCountOfBuilding(buildingId)
+  const floorCount = buildingCount.floors.find((elem: EmptyFacilityDoc) => {
+    return elem.id.toString() === floorId.toString()
   })
 
-  return floor_count
+  return floorCount
 }
 
 /**
  * Delete all previous tick time's empty classroom counts.
  */
 emptyCountSchema.statics.deletePrevCounts = async function(): Promise<void> {
-  const current_tick = TimeManager.getCurrentTick(tick_min)
-  await this.deleteMany({ time: { $lt: current_tick } })
+  const currentTick = TimeManager.getCurrentTick(tickMin)
+  await this.deleteMany({ time: { $lt: currentTick } })
 }
 
-export default <EmptyCountModel>(
-  mongoose.model<EmptyCountDoc, EmptyCountModel>(
-    'EmptyCount',
-    emptyCountSchema,
-    'emptyCounts'
-  )
+export default mongoose.model<EmptyCountDoc, EmptyCountModel>(
+  'EmptyCount',
+  emptyCountSchema,
+  'emptyCounts'
 )

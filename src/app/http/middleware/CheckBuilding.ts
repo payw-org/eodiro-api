@@ -1,4 +1,4 @@
-import { NextHandler } from 'Http/RequestHandler'
+import { Response, NextHandler } from 'Http/RequestHandler'
 import Building from 'Database/models/building'
 import logger from 'Configs/log'
 
@@ -7,13 +7,13 @@ export default class CheckBuilding {
    * Check if building is not exist and get building id.
    */
   public static handler(): NextHandler {
-    return async (req, res, next) => {
-      let univ_id = res.locals.univ_id
-      let bldg_num = req.params.building
+    return async (req, res, next): Promise<Response | void> => {
+      const univId = res.locals.univId
+      const bldgNum = req.params.building
 
       // Find building id
       const building = await Building.findOne(
-        { university: univ_id, number: bldg_num },
+        { university: univId, number: bldgNum },
         { _id: 1 },
         err => {
           if (err) {
@@ -32,7 +32,7 @@ export default class CheckBuilding {
       }
 
       // pass the building document id
-      res.locals.bldg_id = building._id
+      res.locals.bldgId = building._id
 
       return next()
     }

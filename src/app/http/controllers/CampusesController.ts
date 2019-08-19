@@ -1,4 +1,4 @@
-import { SimpleHandler } from 'Http/RequestHandler'
+import { Response, SimpleHandler } from 'Http/RequestHandler'
 import University from 'Database/models/university'
 import logger from 'Configs/log'
 import { UniversityDoc } from 'Database/schemas/university'
@@ -14,11 +14,11 @@ export default class CampusesController {
    * Get a listing of the campus.
    */
   public static index(): SimpleHandler {
-    return async (req, res) => {
-      let language = req.body.language
+    return async (req, res): Promise<Response> => {
+      const language = req.body.language
 
       // find all university document
-      const universities = <UniversityDoc[]>await University.find(
+      const universities = (await University.find(
         {},
         { _id: 0, name: 1, campus: 1, vendor: 1 },
         err => {
@@ -26,7 +26,7 @@ export default class CampusesController {
             logger.error(err)
           }
         }
-      ).sort([['name.' + language, 1]])
+      ).sort([['name.' + language, 1]])) as UniversityDoc[]
 
       // if not exist
       if (universities.length === 0) {
@@ -38,9 +38,9 @@ export default class CampusesController {
       }
 
       // data formatting
-      const campus_list: CampusInfo[] = []
+      const campusList: CampusInfo[] = []
       universities.forEach(univ => {
-        campus_list.push({
+        campusList.push({
           university: univ.name[language],
           campus: univ.campus[language],
           vendor: univ.vendor
@@ -48,7 +48,7 @@ export default class CampusesController {
       })
 
       return res.status(200).json({
-        campuses: campus_list
+        campuses: campusList
       })
     }
   }

@@ -6,7 +6,7 @@ import HandleClientError from 'Http/middleware/HandleClientError'
 import HandleServerError from 'Http/middleware/HandleServerError'
 
 export default class RouteServiceProvider {
-  private app: Express
+  private readonly app: Express
 
   private basicMiddleware = [
     bodyParser.urlencoded({ extended: true }),

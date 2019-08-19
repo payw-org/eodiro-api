@@ -8,7 +8,7 @@ export default class LecturesComparator {
    * Return compare result as time flow.
    */
   public static comparator(): Comparator {
-    return (a, b) => {
+    return (a, b): number => {
       return a.time.day < b.time.day
         ? -1
         : a.time.day > b.time.day
