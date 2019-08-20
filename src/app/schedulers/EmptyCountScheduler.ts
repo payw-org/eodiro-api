@@ -8,7 +8,6 @@ import EmptyCount, {
   sMin,
   tickMin
 } from 'Database/models/empty_count'
-
 import TimeManager from 'Helpers/TimeManager'
 
 export default class EmptyCountScheduler {
