@@ -1,8 +1,5 @@
-import { server_private } from './private'
-
 const config = {
-  base_uri: 'eodiro.com',
-  port: server_private.node_port
+  port: process.env.APP_PORT
 }
 
 export default config

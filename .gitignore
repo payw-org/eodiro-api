@@ -1,10 +1,11 @@
 .vscode
 .DS_Store
 node_modules
-package-lock.json
-pm2.json
+yarn.lock
 build
 logs
-src/configs/private.ts
 src/resources/scrap
 src/resources/parse-debug
+.idea
+.env
+pm2.config.js

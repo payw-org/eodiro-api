@@ -1,0 +1,97 @@
+{
+  "name": {
+    "kr": "중앙대학교",
+    "en": "Chung-Ang University"
+  },
+  "campus": {
+    "kr": "서울",
+    "en": "Seoul"
+  },
+  "vendor": "seoul",
+  "buildings": [
+    {
+      "number": "101",
+      "name": "영신관"
+    },
+    {
+      "number": "102",
+      "name": "약학대학 및 R&D센터"
+    },
+    {
+      "number": "103",
+      "name": "파이퍼홀"
+    },
+    {
+      "number": "104",
+      "name": "수림과학관"
+    },
+    {
+      "number": "105",
+      "name": "제1의학관"
+    },
+    {
+      "number": "106",
+      "name": "제2의학관"
+    },
+    {
+      "number": "107",
+      "name": "학생회관"
+    },
+    {
+      "number": "201",
+      "name": "본관"
+    },
+    {
+      "number": "202",
+      "name": "전산정보관"
+    },
+    {
+      "number": "203",
+      "name": "서라벌홀"
+    },
+    {
+      "number": "204",
+      "name": "중앙도서관"
+    },
+    {
+      "number": "207",
+      "name": "봅스트홀"
+    },
+    {
+      "number": "208",
+      "name": "제2공학관"
+    },
+    {
+      "number": "209",
+      "name": "창업보육관"
+    },
+    {
+      "number": "301",
+      "name": "중앙문화예술관"
+    },
+    {
+      "number": "302",
+      "name": "대학원"
+    },
+    {
+      "number": "303",
+      "name": "법학관"
+    },
+    {
+      "number": "304",
+      "name": "미디어공연영상관"
+    },
+    {
+      "number": "305",
+      "name": "교수연구동 및 체육관"
+    },
+    {
+      "number": "309",
+      "name": "블루미르홀"
+    },
+    {
+      "number": "310",
+      "name": "100주년기념관"
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import DBInitializer from 'DB/DBInitializer'
 
 export default class DBServiceProvider {
   private dbConnector: DBConnector
+
   private dbInitializer: DBInitializer
 
   public constructor() {
@@ -13,7 +14,5 @@ export default class DBServiceProvider {
   public async boot(): Promise<void> {
     await this.dbConnector.connect()
     await this.dbInitializer.initialize()
-
-    return Promise.resolve()
   }
 }

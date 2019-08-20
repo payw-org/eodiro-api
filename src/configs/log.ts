@@ -1,22 +1,22 @@
-import app_root from 'app-root-path'
+import appRoot from 'app-root-path'
 import winston from 'winston'
 
 const { combine, timestamp, printf } = winston.format
 
-const print_log = printf(({ level, message, timestamp }) => {
+const printLog = printf(({ level, message, timestamp }) => {
   return `${timestamp} ${level}: ${message}`
 })
 
 const options = {
   file: {
     level: 'info',
-    filename: app_root.path + '/logs/info.log',
+    filename: appRoot.path + '/logs/info.log',
     handleExceptions: true,
     json: false,
     maxsize: 5242880,
     maxFiles: 5,
     colorize: false,
-    format: combine(timestamp(), print_log)
+    format: combine(timestamp(), printLog)
   },
 
   console: {
@@ -24,7 +24,7 @@ const options = {
     handleExceptions: true,
     json: false,
     colorize: true,
-    format: combine(timestamp(), print_log)
+    format: combine(timestamp(), printLog)
   }
 }
 
