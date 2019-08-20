@@ -42,8 +42,8 @@ export default class RouteServiceProvider {
    */
   public boot(): Express {
     this.app.use(this.basicMiddleware)
-    this.app.use(this.errorHandlerMiddleware)
     this.app.use('/v2', router) // version 2
+    this.app.use(this.errorHandlerMiddleware)
 
     return this.app
   }
