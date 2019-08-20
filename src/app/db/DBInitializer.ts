@@ -24,9 +24,11 @@ export default class DBInitializer {
   }
 
   /**
+   * Delete all previous empty classroom counts.
    * Calculate and save empty classroom counts in advance.
    */
   private async calcEmptyCounts(): Promise<void> {
+    await EmptyCount.deletePrevCounts()
     await EmptyCount.saveCurrentCount()
     await EmptyCount.saveNextCount()
   }
