@@ -52,7 +52,7 @@ export default class InquiriesController {
         from: '"어디로" <contact@payw.org>',
         to: 'contact@payw.org',
         subject:
-          '어디로 문의 <' + university.vendor + '> - ' + uniqid.process(),
+          '어디로 문의 [' + university.vendor + '] - ' + uniqid.process(),
         text: req.body.text
       })
 
