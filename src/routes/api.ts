@@ -24,4 +24,12 @@ router.use('/campuses/:vendor/inquiry', inquiryRouter)
 // show campus list
 router.get('/campuses', LocaleMiddleware.handler(), CampusesController.index())
 
+// router.get('/test', (req, res) => {
+//   LogHelper.log('info', 'logger test')
+//
+//   res.json({
+//     result: 'good'
+//   })
+// })
+
 export default router
