@@ -1,16 +1,16 @@
 import { GlobalNameDoc } from 'Database/schemas/global_name'
 import metadataSeoulJSON from 'Resources/metadata/cau_seoul.json'
-import metadataAnseongJSON from 'Resources/metadata/cau_anseong.json'
+// import metadataAnseongJSON from 'Resources/metadata/cau_anseong.json'
 import classesSeoulJSON from 'Resources/classes/cau_seoul.json'
-import classesAnseongJSON from 'Resources/classes/cau_anseong.json'
+// import classesAnseongJSON from 'Resources/classes/cau_anseong.json'
 import University from 'Database/models/university'
 import Building from 'Database/models/building'
 import Class from 'Database/models/class'
-import logger from 'Configs/log'
 import { ClassDoc } from 'Database/schemas/class'
 import Floor from 'Database/models/floor'
 import Classroom from 'Database/models/classroom'
 import Lecture from 'Database/models/lecture'
+import LogHelper from 'Helpers/LogHelper'
 
 interface ClassesJSON {
   vendor: string
@@ -34,16 +34,16 @@ export default class DBSeeder {
    * Seed(resource) data for metadata
    */
   private metadataSeed: UnivMetaJSON[] = [
-    metadataSeoulJSON as UnivMetaJSON,
-    metadataAnseongJSON as UnivMetaJSON
+    metadataSeoulJSON as UnivMetaJSON
+    // metadataAnseongJSON as UnivMetaJSON
   ]
 
   /**
    * Seed(resource) data for classes
    */
   private classesSeed: ClassesJSON[] = [
-    classesSeoulJSON as ClassesJSON,
-    classesAnseongJSON as ClassesJSON
+    classesSeoulJSON as ClassesJSON
+    // classesAnseongJSON as ClassesJSON
   ]
 
   /**
@@ -99,14 +99,25 @@ export default class DBSeeder {
             { new: true }
           )
         } catch (err) {
-          logger.error('Class save error: ' + err)
+          LogHelper.log('error', 'Class save error: ' + err)
         }
       })
     )
 
-    const classes = (await Class.find()) as ClassDoc[]
-    // create floors, classrooms, lectures
+    // get all classes
+    const classes = (await Class.find(
+      {},
+      { _id: 1, closed: 1, locations: 1 }
+    )) as ClassDoc[]
+    const unregisteredBldgSet = new Set()
+
+    // create and link floors, classrooms, lectures
     for (const cls of classes) {
+      // skip closed class
+      if (cls.closed) {
+        continue
+      }
+
       for (let i = 0; i < cls.locations.length; i++) {
         const location = cls.locations[i]
 
@@ -117,6 +128,12 @@ export default class DBSeeder {
         const building = await Building.findOne({
           number: location.building
         })
+
+        // skip unregistered building
+        if (building === null) {
+          unregisteredBldgSet.add(location.building)
+          continue
+        }
 
         // find class floor
         // if not exist, create floor
@@ -157,6 +174,18 @@ export default class DBSeeder {
         })
       }
     }
+
+    // log unregistered buildings
+    if (unregisteredBldgSet.size !== 0) {
+      LogHelper.log(
+        'warn',
+        'Buildings `' +
+          Array.from(unregisteredBldgSet)
+            .sort()
+            .join(', ') +
+          '` are unregistered.'
+      )
+    }
   }
 
   /**
@@ -165,9 +194,9 @@ export default class DBSeeder {
   public async refreshMetadataAndClasses(): Promise<void> {
     // delete all documents about metadata and classes
     await Promise.all([
+      Class.deleteMany({}),
       University.deleteMany({}),
       Building.deleteMany({}),
-      Class.deleteMany({}),
       Floor.deleteMany({}),
       Classroom.deleteMany({}),
       Lecture.deleteMany({})
