@@ -1,12 +1,12 @@
 import { Response, SimpleHandler } from 'Http/RequestHandler'
 import Floor from 'Database/models/floor'
-import logger from 'Configs/log'
 import { FloorDoc } from 'Database/schemas/floor'
 import { ClassroomDoc } from 'Database/schemas/classroom'
 import { LectureDoc } from 'Database/schemas/lecture'
 import { ClassDoc } from 'Database/schemas/class'
 import LecturesComparator from 'Helpers/LecturesComparator'
 import { TimeDoc } from 'Database/schemas/time'
+import LogHelper from 'Helpers/LogHelper'
 
 export interface LectureInfo {
   name: string
@@ -33,7 +33,7 @@ export default class ClassroomsController {
         { _id: 0, classrooms: 1 },
         err => {
           if (err) {
-            logger.error(err)
+            LogHelper.log('error', err)
           }
         }
       ).populate({

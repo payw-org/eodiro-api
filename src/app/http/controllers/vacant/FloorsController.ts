@@ -1,10 +1,10 @@
 import { Response, SimpleHandler } from 'Http/RequestHandler'
 import Building from 'Database/models/building'
-import logger from 'Configs/log'
 import { BuildingDoc } from 'Database/schemas/building'
 import { FloorDoc } from 'Database/schemas/floor'
 import EmptyCount from 'Database//models/empty_count'
 import FloorsComparator from 'Helpers/FloorsComparator'
+import LogHelper from 'Helpers/LogHelper'
 
 export interface FloorInfo {
   number: string
@@ -26,7 +26,7 @@ export default class FloorsController {
         { _id: 0, floors: 1 },
         err => {
           if (err) {
-            logger.error(err)
+            LogHelper.log('error', err)
           }
         }
       ).populate({

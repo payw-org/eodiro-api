@@ -1,11 +1,11 @@
 import { FloorDoc } from 'Database/schemas/floor'
-import logger from 'Configs/log'
 import { BuildingDoc } from 'Database/schemas/building'
 import Building from 'Database/models/building'
 import Classroom from 'Database/models/classroom'
 import { ClassroomDoc } from 'Database/schemas/classroom'
 import { LectureDoc } from 'Database/schemas/lecture'
 import { ClassDoc } from 'Database/schemas/class'
+import LogHelper from 'Helpers/LogHelper'
 
 interface EmptyInfo {
   id: string
@@ -35,7 +35,7 @@ export default class EmptyClassroomHelper {
       { _id: 1, floors: 1 },
       err => {
         if (err) {
-          logger.error(err)
+          LogHelper.log('error', err)
         }
       }
     ).populate({

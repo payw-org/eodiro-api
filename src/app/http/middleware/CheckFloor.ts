@@ -1,6 +1,6 @@
 import { Response, NextHandler } from 'Http/RequestHandler'
 import Floor from 'Database/models/floor'
-import logger from 'Configs/log'
+import LogHelper from 'Helpers/LogHelper'
 
 export default class CheckFloor {
   /**
@@ -20,7 +20,7 @@ export default class CheckFloor {
         { _id: 1 },
         err => {
           if (err) {
-            logger.error(err)
+            LogHelper.log('error', err)
           }
         }
       )

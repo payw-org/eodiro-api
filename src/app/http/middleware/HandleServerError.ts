@@ -1,5 +1,5 @@
 import { Response, ErrorHandler } from 'Http/RequestHandler'
-import logger from 'Configs/log'
+import LogHelper from 'Helpers/LogHelper'
 
 export default class HandleServerError {
   /**
@@ -7,7 +7,7 @@ export default class HandleServerError {
    */
   public static handler(): ErrorHandler {
     return (err, req, res): Response => {
-      logger.error(err.stack)
+      LogHelper.log('error', err.stack)
 
       return res.status(500).json({
         err: {

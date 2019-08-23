@@ -1,9 +1,9 @@
 import { Response, SimpleHandler } from 'Http/RequestHandler'
 import { UniversityDoc } from 'Database/schemas/university'
 import University from 'Database/models/university'
-import logger from 'Configs/log'
 import { BuildingDoc } from 'Database/schemas/building'
 import EmptyCount from 'Database//models/empty_count'
+import LogHelper from 'Helpers/LogHelper'
 
 interface BldgInfo {
   number: string
@@ -26,7 +26,7 @@ export default class BuildingsController {
         { _id: 0, buildings: 1 },
         err => {
           if (err) {
-            logger.error(err)
+            LogHelper.log('error', err)
           }
         }
       ).populate({

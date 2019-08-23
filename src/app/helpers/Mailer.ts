@@ -1,6 +1,6 @@
 import mailerConfig from 'Configs/mailer'
 import nodeMailer, { Transporter } from 'nodemailer'
-import logger from 'Configs/log'
+import LogHelper from 'Helpers/LogHelper'
 
 export default class Mailer {
   /**
@@ -20,7 +20,7 @@ export default class Mailer {
   public static sendMail(mailOptions: object): void {
     this.transporter.sendMail(mailOptions, err => {
       if (err) {
-        logger.error('Mailer error: ' + err.stack)
+        LogHelper.log('error', 'Mailer error: ' + err.stack)
       }
     })
   }
