@@ -5,7 +5,7 @@
  * @copyright 2019 Payw
  */
 
-import mongoose, { Document } from 'mongoose'
+import mongoose from 'mongoose'
 
 import emptyFacilitySchema, {
   EmptyFacilityDoc
