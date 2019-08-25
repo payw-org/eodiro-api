@@ -1,5 +1,8 @@
 {
+  "year": "2019",
+  "semester": "2",
   "vendor": "anseong",
+  "mainCourse": "학부",
   "classes": [
     {
       "classId": "49950-01",
