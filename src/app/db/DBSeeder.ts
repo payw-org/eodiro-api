@@ -11,9 +11,13 @@ import Floor from 'Database/models/floor'
 import Classroom from 'Database/models/classroom'
 import Lecture from 'Database/models/lecture'
 import LogHelper from 'Helpers/LogHelper'
+import { UniversityDoc } from 'Database/schemas/university'
 
 interface ClassesJSON {
+  year: string
+  semester: string
   vendor: string
+  mainCourse: string
   classes: ClassDoc[]
 }
 
@@ -27,6 +31,12 @@ interface UnivMetaJSON {
   campus: GlobalNameDoc
   vendor: string
   buildings: BldgMetaJSON[]
+}
+
+// Set the current semester with this.
+const currentSemester = {
+  year: '2019',
+  semester: '2'
 }
 
 export default class DBSeeder {
@@ -95,23 +105,51 @@ export default class DBSeeder {
           // link classes to university
           await University.findOneAndUpdate(
             { vendor: seed.vendor },
-            { classes: classes },
-            { new: true }
+            {
+              $push: {
+                classLists: {
+                  year: seed.year,
+                  semester: seed.semester,
+                  mainCourse: seed.mainCourse,
+                  classes: classes
+                }
+              }
+            },
+            { upsert: true, new: true }
           )
         } catch (err) {
           LogHelper.log('error', 'Class save error: ' + err)
         }
       })
     )
+  }
 
-    // get all classes
-    const classes = (await Class.find(
-      {},
-      { _id: 1, closed: 1, locations: 1 }
-    )) as ClassDoc[]
+  /**
+   * Create floors, classrooms and lectures using current semester's class documents.
+   */
+  public async linkClassesOfCurrentSemester(): Promise<void> {
+    // get all current semester's classes
+    const universities = (await University.find(
+      {
+        'classLists.year': currentSemester.year,
+        'classLists.semester': currentSemester.semester
+      },
+      { _id: 0, 'classLists.$': 1 }
+    ).populate({
+      path: 'classLists.classes',
+      select: '_id closed locations'
+    })) as UniversityDoc[]
+
+    // gather classes
+    const classes: ClassDoc[] = []
+    for (const univ of universities) {
+      for (const classList of univ.classLists) {
+        classes.push(...(classList.classes as ClassDoc[]))
+      }
+    }
+
     const unregisteredBldgSet = new Set()
 
-    // create and link floors, classrooms, lectures
     for (const cls of classes) {
       // skip closed class
       if (cls.closed) {
@@ -190,6 +228,8 @@ export default class DBSeeder {
 
   /**
    * Apply refreshed seed data.
+   *
+   * @deprecated
    */
   public async refreshMetadataAndClasses(): Promise<void> {
     // delete all documents about metadata and classes
@@ -205,5 +245,6 @@ export default class DBSeeder {
     // re-seeding
     await this.seedMetadata()
     await this.seedClasses()
+    await this.linkClassesOfCurrentSemester()
   }
 }

@@ -18,6 +18,7 @@ export default class DBInitializer {
     if (univCount === 0) {
       await this.dbSeeder.seedMetadata()
       await this.dbSeeder.seedClasses()
+      await this.dbSeeder.linkClassesOfCurrentSemester()
     }
 
     await this.calcEmptyCounts()
