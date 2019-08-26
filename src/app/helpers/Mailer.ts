@@ -1,4 +1,3 @@
-import mailerConfig from 'Configs/mailer'
 import nodeMailer, { Transporter } from 'nodemailer'
 import LogHelper from 'Helpers/LogHelper'
 
@@ -7,13 +6,13 @@ export default class Mailer {
    * Mail transporter
    */
   private static transporter: Transporter = nodeMailer.createTransport({
-    service: mailerConfig.service,
-    host: mailerConfig.host,
-    port: mailerConfig.port,
+    service: process.env.MAIL_SERVICE,
+    host: process.env.MAIL_HOST,
+    port: Number(process.env.MAIL_PORT),
     secure: true,
     auth: {
-      user: mailerConfig.username,
-      pass: mailerConfig.password
+      user: process.env.MAIL_USERNAME,
+      pass: process.env.MAIL_PASSWORD
     }
   })
 
