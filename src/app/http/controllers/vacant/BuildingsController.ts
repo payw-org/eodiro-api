@@ -2,7 +2,7 @@ import { Response, SimpleHandler } from 'Http/RequestHandler'
 import { UniversityDoc } from 'Database/schemas/university'
 import University from 'Database/models/university'
 import { BuildingDoc } from 'Database/schemas/building'
-import EmptyCount from 'Database//models/empty_count'
+import EmptyCount from 'Database//models/empty-count'
 import LogHelper from 'Helpers/LogHelper'
 
 interface BldgInfo {

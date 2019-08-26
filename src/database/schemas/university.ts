@@ -6,9 +6,9 @@
  */
 
 import mongoose, { Document } from 'mongoose'
-import globalNameSchema, { GlobalNameDoc } from './global_name'
+import globalNameSchema, { GlobalNameDoc } from './global-name'
 import { BuildingDoc } from './building'
-import classListSchema, { ClassListDoc } from 'Database/schemas/class_list'
+import classListSchema, { ClassListDoc } from 'Database/schemas/class-list'
 
 export interface UniversityDoc extends Document {
   name: GlobalNameDoc

@@ -2,7 +2,7 @@ import { Response, SimpleHandler } from 'Http/RequestHandler'
 import Building from 'Database/models/building'
 import { BuildingDoc } from 'Database/schemas/building'
 import { FloorDoc } from 'Database/schemas/floor'
-import EmptyCount from 'Database//models/empty_count'
+import EmptyCount from 'Database//models/empty-count'
 import FloorsComparator from 'Helpers/FloorsComparator'
 import LogHelper from 'Helpers/LogHelper'
 

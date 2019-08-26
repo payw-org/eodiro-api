@@ -1,6 +1,6 @@
 import University from 'Database/models/university'
 import DBSeeder from 'DB/DBSeeder'
-import EmptyCount from 'Database/models/empty_count'
+import EmptyCount from 'Database/models/empty-count'
 
 export default class DBInitializer {
   private dbSeeder: DBSeeder

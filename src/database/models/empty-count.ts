@@ -6,11 +6,11 @@
  */
 
 import mongoose, { Model } from 'mongoose'
-import emptyCountSchema, { EmptyCountDoc } from '../schemas/empty_count'
+import emptyCountSchema, { EmptyCountDoc } from '../schemas/empty-count'
 import TimeManager from 'Helpers/TimeManager'
 import EmptyClassroomHelper from 'Helpers/EmptyClassroomHelper'
-import { EmptyBuildingDoc } from 'Database/schemas/empty_building'
-import { EmptyFacilityDoc } from 'Database/schemas/empty_facility'
+import { EmptyBuildingDoc } from 'Database/schemas/empty-building'
+import { EmptyFacilityDoc } from 'Database/schemas/empty-facility'
 
 // define static methods which are frequently used for `EmptyCount` model
 interface EmptyCountModel extends Model<EmptyCountDoc> {
