@@ -24,7 +24,7 @@ export default class FloorsComparator {
    */
   private static floorToNumber(floor: string): number {
     // check if basement floor
-    if (floor.substring(0, 1).toLowerCase() == 'b') {
+    if (floor.substring(0, 1).toLowerCase() === 'b') {
       return -parseInt(floor.substring(1))
     } else {
       return parseInt(floor)
