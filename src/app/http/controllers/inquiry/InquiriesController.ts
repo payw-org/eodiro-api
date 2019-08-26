@@ -5,9 +5,7 @@ import {
   validationResult
 } from 'express-validator'
 import Mailer from 'Helpers/Mailer'
-import University from 'Database/models/university'
-import { UniversityDoc } from 'Database/schemas/university'
-import uniqid from 'uniqid'
+import nanoid from 'nanoid'
 
 export default class InquiriesController {
   /**
@@ -45,8 +43,7 @@ export default class InquiriesController {
       Mailer.sendMail({
         from: '"어디로" <contact@payw.org>',
         to: 'contact@payw.org',
-        subject:
-          '어디로 문의 [' + req.params.vendor + '] - ' + uniqid.process(),
+        subject: '어디로 문의 [' + req.params.vendor + '] - ' + nanoid(10),
         text: req.body.text
       })
 
