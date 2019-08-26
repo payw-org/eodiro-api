@@ -1,7 +1,7 @@
 import express from 'express'
 import InquiriesController from 'Http/controllers/inquiry/InquiriesController'
 
-const router = express.Router()
+const router = express.Router({ mergeParams: true })
 
 /**
  * Controller

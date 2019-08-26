@@ -5,7 +5,7 @@ import FloorsController from 'Http/controllers/vacant/FloorsController'
 import CheckFloorMiddleware from 'Http/middleware/CheckFloor'
 import ClassroomsController from 'Http/controllers/vacant/ClassroomsController'
 
-const router = express.Router()
+const router = express.Router({ mergeParams: true })
 
 /**
  * Middleware

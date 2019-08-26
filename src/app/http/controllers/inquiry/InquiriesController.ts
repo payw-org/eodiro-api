@@ -32,7 +32,7 @@ export default class InquiriesController {
    * Send inquiry to eodiro mailbox.
    */
   public static create(): SimpleHandler {
-    return async (req, res): Promise<Response> => {
+    return (req, res): Response => {
       // Handle validation errors
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
@@ -41,18 +41,12 @@ export default class InquiriesController {
           .json({ errors: errors.array({ onlyFirstError: true }) })
       }
 
-      // get current vendor name
-      const university = (await University.findById(res.locals.univId, {
-        _id: 0,
-        vendor: 1
-      })) as UniversityDoc
-
       // send mail
       Mailer.sendMail({
         from: '"어디로" <contact@payw.org>',
         to: 'contact@payw.org',
         subject:
-          '어디로 문의 [' + university.vendor + '] - ' + uniqid.process(),
+          '어디로 문의 [' + req.params.vendor + '] - ' + uniqid.process(),
         text: req.body.text
       })
 
