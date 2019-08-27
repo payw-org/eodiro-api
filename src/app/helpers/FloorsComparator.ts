@@ -8,7 +8,7 @@ export default class FloorsComparator {
    * Return compare result as descending order.
    */
   public static comparator(): Comparator {
-    return (a, b) => {
+    return (a, b): number => {
       const numA = this.floorToNumber(a.number)
       const numB = this.floorToNumber(b.number)
 
