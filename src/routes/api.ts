@@ -4,6 +4,7 @@ import CheckVendorMiddleware from 'Http/middleware/CheckVendor'
 import CampusesController from 'Http/controllers/CampusesController'
 import vacantRouter from 'Routes/vacant'
 import inquiryRouter from 'Routes/inquiry'
+import searchClassRouter from 'Routes/./search-class'
 
 const router = express.Router()
 
@@ -17,6 +18,7 @@ router.use('/campuses/:vendor', CheckVendorMiddleware.handler())
  */
 router.use('/campuses/:vendor/vacant', vacantRouter)
 router.use('/campuses/:vendor/inquiry', inquiryRouter)
+router.use('/campuses/:vendor/search-class', searchClassRouter)
 
 /**
  * Controller
