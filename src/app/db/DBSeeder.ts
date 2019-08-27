@@ -4,6 +4,7 @@ import metadataSeoulJSON from 'Resources/metadata/cau-seoul.json'
 import classesSeoulJSON from 'Resources/classes/cau-seoul.json'
 // import classesAnseongJSON from 'Resources/classes/cau-anseong.json'
 import University from 'Database/models/university'
+import ClassList from 'Database/models/class-list'
 import Building from 'Database/models/building'
 import Class from 'Database/models/class'
 import { ClassDoc } from 'Database/schemas/class'
@@ -11,7 +12,7 @@ import Floor from 'Database/models/floor'
 import Classroom from 'Database/models/classroom'
 import Lecture from 'Database/models/lecture'
 import LogHelper from 'Helpers/LogHelper'
-import { UniversityDoc } from 'Database/schemas/university'
+import { ClassListDoc } from 'Database/schemas/class-list'
 
 interface ClassesJSON {
   year: string
@@ -102,20 +103,22 @@ export default class DBSeeder {
           // create classes
           const classes = (await Class.insertMany(seed.classes)) as ClassDoc[]
 
+          // create class list
+          const classList = (await ClassList.create({
+            year: seed.year,
+            semester: seed.semester,
+            mainCourse: seed.mainCourse,
+            classes: classes
+          })) as ClassListDoc
+
           // link classes to university
           await University.findOneAndUpdate(
             { vendor: seed.vendor },
             {
               $push: {
-                classLists: {
-                  year: seed.year,
-                  semester: seed.semester,
-                  mainCourse: seed.mainCourse,
-                  classes: classes
-                }
+                classLists: classList._id
               }
-            },
-            { upsert: true, new: true }
+            }
           )
         } catch (err) {
           LogHelper.log('error', 'Class save error: ' + err)
@@ -129,23 +132,18 @@ export default class DBSeeder {
    */
   public async linkClassesOfCurrentSemester(): Promise<void> {
     // get all current semester's classes
-    const universities = (await University.find(
-      {
-        'classLists.year': currentSemester.year,
-        'classLists.semester': currentSemester.semester
-      },
-      { _id: 0, 'classLists.$': 1 }
+    const classLists = (await ClassList.find(
+      { year: currentSemester.year, semester: currentSemester.semester },
+      { classes: 1 }
     ).populate({
-      path: 'classLists.classes',
+      path: 'classes',
       select: '_id closed locations'
-    })) as UniversityDoc[]
+    })) as ClassListDoc[]
 
     // gather classes
     const classes: ClassDoc[] = []
-    for (const univ of universities) {
-      for (const classList of univ.classLists) {
-        classes.push(...(classList.classes as ClassDoc[]))
-      }
+    for (const classList of classLists) {
+      classes.push(...(classList.classes as ClassDoc[]))
     }
 
     const unregisteredBldgSet = new Set()
