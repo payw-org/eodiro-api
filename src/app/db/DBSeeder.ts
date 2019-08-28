@@ -135,10 +135,12 @@ export default class DBSeeder {
     const classLists = (await ClassList.find(
       { year: currentSemester.year, semester: currentSemester.semester },
       { classes: 1 }
-    ).populate({
-      path: 'classes',
-      select: '_id closed locations'
-    })) as ClassListDoc[]
+    )
+      .lean()
+      .populate({
+        path: 'classes',
+        select: '_id closed locations'
+      })) as ClassListDoc[]
 
     // gather classes
     const classes: ClassDoc[] = []
@@ -163,7 +165,7 @@ export default class DBSeeder {
         // find class building
         const building = await Building.findOne({
           number: location.building
-        })
+        }).lean()
 
         // skip unregistered building
         if (building === null) {
@@ -177,7 +179,7 @@ export default class DBSeeder {
           { building: building._id, number: floorNum },
           { building: building._id, number: floorNum },
           { upsert: true, new: true }
-        )
+        ).lean()
 
         // link floor to building
         await Building.findByIdAndUpdate(building._id, {
@@ -190,7 +192,7 @@ export default class DBSeeder {
           { floor: floor._id, number: location.room },
           { floor: floor._id, number: location.room },
           { upsert: true, new: true }
-        )
+        ).lean()
 
         // link classroom to floor
         await Floor.findByIdAndUpdate(floor._id, {

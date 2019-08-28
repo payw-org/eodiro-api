@@ -38,10 +38,12 @@ export default class EmptyClassroomHelper {
           LogHelper.log('error', err)
         }
       }
-    ).populate({
-      path: 'floors',
-      select: '_id classrooms'
-    })) as BuildingDoc[]
+    )
+      .lean()
+      .populate({
+        path: 'floors',
+        select: '_id classrooms'
+      })) as BuildingDoc[]
 
     const buildingEmptyList: BuildingEmptyInfo[] = []
     const promises3d: Promise<boolean>[][][] = [] // empty check promise list
@@ -120,19 +122,21 @@ export default class EmptyClassroomHelper {
     const classroom = (await Classroom.findById(classroomId, {
       _id: 0,
       lectures: 1
-    }).populate({
-      path: 'lectures',
-      select: 'class order -_id',
-      populate: {
-        path: 'class',
-        select: 'times -_id',
-        match: {
-          'times.day': convertedDate.day,
-          'times.start': { $lte: convertedDate.time },
-          'times.end': { $gte: convertedDate.time }
+    })
+      .lean()
+      .populate({
+        path: 'lectures',
+        select: 'class order -_id',
+        populate: {
+          path: 'class',
+          select: 'times -_id',
+          match: {
+            'times.day': convertedDate.day,
+            'times.start': { $lte: convertedDate.time },
+            'times.end': { $gte: convertedDate.time }
+          }
         }
-      }
-    })) as ClassroomDoc
+      })) as ClassroomDoc
 
     const lectures = classroom.lectures as LectureDoc[]
     let isEmpty = true

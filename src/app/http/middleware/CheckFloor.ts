@@ -23,7 +23,7 @@ export default class CheckFloor {
             LogHelper.log('error', err)
           }
         }
-      )
+      ).lean()
 
       // if not found
       if (!floor) {

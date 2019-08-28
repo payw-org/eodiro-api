@@ -29,12 +29,14 @@ export default class BuildingsController {
             LogHelper.log('error', err)
           }
         }
-      ).populate({
-        path: 'buildings',
-        select: 'number name floors',
-        match: { floors: { $exists: true, $not: { $size: 0 } } },
-        options: { sort: { number: 1 } }
-      })) as UniversityDoc
+      )
+        .lean()
+        .populate({
+          path: 'buildings',
+          select: 'number name floors',
+          match: { floors: { $exists: true, $not: { $size: 0 } } },
+          options: { sort: { number: 1 } }
+        })) as UniversityDoc
 
       const buildings = university.buildings as BuildingDoc[]
 

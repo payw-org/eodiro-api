@@ -86,7 +86,7 @@ emptyCountSchema.statics.getCurrentCountOfBuilding = async function(
         'buildings.id': buildingId
       },
       { _id: 0, 'buildings.$': 1 }
-    )) as EmptyCountDoc
+    ).lean()) as EmptyCountDoc
   } else {
     // get last tick time's empty classroom count
     count = (await this.findOne(
@@ -95,7 +95,9 @@ emptyCountSchema.statics.getCurrentCountOfBuilding = async function(
         'buildings.id': buildingId
       },
       { _id: 0, 'buildings.$': 1 }
-    ).sort('-time')) as EmptyCountDoc
+    )
+      .lean()
+      .sort('-time')) as EmptyCountDoc
   }
 
   return count.buildings[0]

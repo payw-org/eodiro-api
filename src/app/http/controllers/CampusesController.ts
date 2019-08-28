@@ -26,7 +26,9 @@ export default class CampusesController {
             LogHelper.log('error', err)
           }
         }
-      ).sort([['name.' + language, 1]])) as UniversityDoc[]
+      )
+        .lean()
+        .sort([['name.' + language, 1]])) as UniversityDoc[]
 
       // if not exist
       if (universities.length === 0) {

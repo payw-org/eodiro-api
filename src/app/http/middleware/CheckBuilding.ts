@@ -20,7 +20,7 @@ export default class CheckBuilding {
             LogHelper.log('error', err)
           }
         }
-      )
+      ).lean()
 
       // if not found
       if (!building) {

@@ -19,7 +19,7 @@ export default class CheckVendor {
             LogHelper.log('error', err)
           }
         }
-      )
+      ).lean()
 
       // if not found
       if (!university) {

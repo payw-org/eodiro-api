@@ -36,19 +36,21 @@ export default class ClassroomsController {
             LogHelper.log('error', err)
           }
         }
-      ).populate({
-        path: 'classrooms',
-        select: 'number lectures -_id',
-        options: { sort: { number: 1 } }, // sort by ascending order of classroom number
-        populate: {
-          path: 'lectures',
-          select: 'class order -_id',
+      )
+        .lean()
+        .populate({
+          path: 'classrooms',
+          select: 'number lectures -_id',
+          options: { sort: { number: 1 } }, // sort by ascending order of classroom number
           populate: {
-            path: 'class',
-            select: '-times._id -_id'
+            path: 'lectures',
+            select: 'class order -_id',
+            populate: {
+              path: 'class',
+              select: '-times._id -_id'
+            }
           }
-        }
-      })) as FloorDoc
+        })) as FloorDoc
 
       const classrooms = floor.classrooms as ClassroomDoc[]
 

@@ -126,14 +126,16 @@ export default class FilterController {
     const universities = (await University.find(
       {},
       { _id: 0, 'campus.kr': 1, classLists: 1 }
-    ).populate({
-      path: 'classLists',
-      select: 'year semester -_id',
-      match: {
-        year: year,
-        semester: semester
-      }
-    })) as UniversityDoc[]
+    )
+      .lean()
+      .populate({
+        path: 'classLists',
+        select: 'year semester -_id',
+        match: {
+          year: year,
+          semester: semester
+        }
+      })) as UniversityDoc[]
 
     const campusList = universities
       .filter(univ => univ.classLists.length !== 0)
@@ -162,14 +164,16 @@ export default class FilterController {
         _id: 0,
         classLists: 1
       }
-    ).populate({
-      path: 'classLists',
-      select: 'year semester mainCourse -_id',
-      match: {
-        year: year,
-        semester: semester
-      }
-    })) as UniversityDoc
+    )
+      .lean()
+      .populate({
+        path: 'classLists',
+        select: 'year semester mainCourse -_id',
+        match: {
+          year: year,
+          semester: semester
+        }
+      })) as UniversityDoc
 
     const mainCourseList = (university.classLists as ClassListDoc[]).map(
       classList => classList.mainCourse
@@ -200,22 +204,26 @@ export default class FilterController {
         _id: 0,
         classLists: 1
       }
-    ).populate({
-      path: 'classLists',
-      select: 'year semester mainCourse classes -_id',
-      match: {
-        year: year,
-        semester: semester,
-        mainCourse: mainCourse
-      }
-    })) as UniversityDoc
+    )
+      .lean()
+      .populate({
+        path: 'classLists',
+        select: 'year semester mainCourse classes -_id',
+        match: {
+          year: year,
+          semester: semester,
+          mainCourse: mainCourse
+        }
+      })) as UniversityDoc
 
     const classList = university.classLists[0] as ClassListDoc
 
     const collegeList = await Class.find(
       { _id: { $in: classList.classes } },
       { _id: 0, college: 1 }
-    ).distinct('college')
+    )
+      .lean()
+      .distinct('college')
     collegeList.sort()
 
     return collegeList
@@ -244,29 +252,35 @@ export default class FilterController {
         _id: 0,
         classLists: 1
       }
-    ).populate({
-      path: 'classLists',
-      select: 'year semester mainCourse classes -_id',
-      match: {
-        year: year,
-        semester: semester,
-        mainCourse: mainCourse
-      }
-    })) as UniversityDoc
+    )
+      .lean()
+      .populate({
+        path: 'classLists',
+        select: 'year semester mainCourse classes -_id',
+        match: {
+          year: year,
+          semester: semester,
+          mainCourse: mainCourse
+        }
+      })) as UniversityDoc
 
     const classList = university.classLists[0] as ClassListDoc
 
     let subjectList
-    if (college === undefined) {
+    if (!college) {
       subjectList = await Class.find(
         { _id: { $in: classList.classes } },
         { _id: 0, subject: 1 }
-      ).distinct('subject')
+      )
+        .lean()
+        .distinct('subject')
     } else {
       subjectList = await Class.find(
         { _id: { $in: classList.classes }, college: college },
         { _id: 0, subject: 1 }
-      ).distinct('subject')
+      )
+        .lean()
+        .distinct('subject')
     }
     subjectList.sort()
 

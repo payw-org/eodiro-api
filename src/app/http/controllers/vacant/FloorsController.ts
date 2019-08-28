@@ -29,10 +29,12 @@ export default class FloorsController {
             LogHelper.log('error', err)
           }
         }
-      ).populate({
-        path: 'floors',
-        select: 'number'
-      })) as BuildingDoc
+      )
+        .lean()
+        .populate({
+          path: 'floors',
+          select: 'number'
+        })) as BuildingDoc
 
       const floors = building.floors as FloorDoc[]
 
