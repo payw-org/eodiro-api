@@ -9,6 +9,7 @@ import express, { Express } from 'express'
 import router from 'Routes/api'
 import HandleClientError from 'Http/middleware/HandleClientError'
 import HandleServerError from 'Http/middleware/HandleServerError'
+import HandleSyntaxError from 'Http/middleware/HandleSyntaxError'
 
 const MongoStore = connectMongo(session)
 
@@ -46,6 +47,7 @@ export default class RouteServiceProvider {
    */
   private errorHandlerMiddleware = [
     HandleClientError.handler(),
+    HandleSyntaxError.handler(),
     HandleServerError.handler()
   ]
 
