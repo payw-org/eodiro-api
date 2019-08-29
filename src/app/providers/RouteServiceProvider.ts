@@ -24,8 +24,8 @@ export default class RouteServiceProvider {
   private basicMiddleware = [
     helmet(),
     cors(),
-    bodyParser.urlencoded({ extended: true }),
     bodyParser.json(),
+    bodyParser.urlencoded({ extended: true }),
     session({
       genid: () => {
         return uuidv5(process.env.UUID_DNS, uuidv5.DNS)
@@ -62,7 +62,7 @@ export default class RouteServiceProvider {
   public boot(): Express {
     this.app.set('trust proxy', 1) // trust first proxy
     this.app.use(this.basicMiddleware)
-    this.app.use('/v2', router) // version 2
+    this.app.use('/v2', router) // versioning
     this.app.use(this.errorHandlerMiddleware)
 
     return this.app
