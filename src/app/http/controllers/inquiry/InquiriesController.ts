@@ -1,9 +1,5 @@
 import { SimpleHandler, Response } from 'Http/RequestHandler'
-import {
-  checkSchema,
-  ValidationChain,
-  validationResult
-} from 'express-validator'
+import { checkSchema, ValidationChain } from 'express-validator'
 import Mailer from 'Helpers/Mailer'
 import nanoid from 'nanoid'
 
@@ -20,7 +16,7 @@ export default class InquiriesController {
         isLength: { options: { min: 2, max: 500 } },
         trim: true,
         escape: true,
-        errorMessage: 'Text must be 2 - 500 length string.'
+        errorMessage: '`text` must be 2 - 500 length string.'
       }
     })
   }
@@ -31,14 +27,6 @@ export default class InquiriesController {
    */
   public static create(): SimpleHandler {
     return (req, res): Response => {
-      // Handle validation errors
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        return res
-          .status(422)
-          .json({ errors: errors.array({ onlyFirstError: true }) })
-      }
-
       // send mail
       Mailer.sendMail({
         from: '"어디로" <contact@payw.org>',
