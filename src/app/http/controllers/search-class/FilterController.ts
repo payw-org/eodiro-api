@@ -5,6 +5,7 @@ import PriorityComparator from 'Helpers/PriorityComparator'
 import { UniversityDoc } from 'Database/schemas/university'
 import { ClassListDoc } from 'Database/schemas/class-list'
 import Class from 'Database/models/class'
+import { checkSchema, ValidationChain } from 'express-validator'
 
 interface FilterList {
   year: string[]
@@ -100,7 +101,7 @@ export default class FilterController {
         mainCourse: mainCourse
       }
 
-      return res.status(200).json({
+      const responseBody: GetFilterResponseBody = {
         filterList: {
           year: yearList,
           semester: semesterList,
@@ -115,7 +116,181 @@ export default class FilterController {
           campus: campus,
           mainCourse: mainCourse
         }
-      })
+      }
+
+      return res.status(200).json(responseBody)
+    }
+  }
+
+  /**
+   * Validate `update` request.
+   */
+  public static validateUpdate(): ValidationChain[] {
+    return checkSchema({
+      year: {
+        optional: true,
+        in: 'body',
+        isString: true,
+        trim: true,
+        escape: true,
+        errorMessage: '`year` must be a string.'
+      },
+      semester: {
+        optional: true,
+        in: 'body',
+        isString: true,
+        trim: true,
+        escape: true,
+        errorMessage: '`semester` must be a string.'
+      },
+      campus: {
+        optional: true,
+        in: 'body',
+        isString: true,
+        trim: true,
+        escape: true,
+        errorMessage: '`campus` must be a string.'
+      },
+      mainCourse: {
+        optional: true,
+        in: 'body',
+        isString: true,
+        trim: true,
+        escape: true,
+        errorMessage: '`mainCourse` must be a string.'
+      },
+      college: {
+        optional: true,
+        in: 'body',
+        isString: true,
+        trim: true,
+        escape: true,
+        errorMessage: '`college` must be a string.'
+      },
+      subject: {
+        optional: true,
+        in: 'body',
+        isString: true,
+        trim: true,
+        escape: true,
+        errorMessage: '`subject` must be a string.'
+      }
+    })
+  }
+
+  /**
+   * Partial update to the filter value.
+   * Get filter list and filter value according to updated thing.
+   * Update session value about filter to new.
+   * Return new filter list and filter value.
+   */
+  public static update(): SimpleHandler {
+    return async (req, res): Promise<Response> => {
+      const yearList = await this.getYearList()
+
+      let year = req.body.year || req.session.filter.year // get old if not updated
+      // Set as default if not in the list
+      if (!yearList.includes(year)) {
+        year = yearList[0]
+      }
+
+      const semesterList = await this.getSemesterList(year)
+
+      let semester = req.body.semester || req.session.filter.semester
+      if (!semesterList.includes(semester)) {
+        semester = semesterList[0]
+      }
+
+      const campusList = await this.getCampusList(year, semester)
+
+      let campus = req.body.campus || req.session.filter.campus
+      if (!campusList.includes(campus)) {
+        campus = campusList[0]
+      }
+
+      const mainCourseList = await this.getMainCourseList(
+        year,
+        semester,
+        campus
+      )
+
+      let mainCourse = req.body.mainCourse || req.session.filter.mainCourse
+      if (!mainCourseList.includes(mainCourse)) {
+        mainCourse = mainCourseList[0]
+      }
+
+      const collegeList = await this.getCollegeList(
+        year,
+        semester,
+        campus,
+        mainCourse
+      )
+
+      let college
+      // empty string filter value means all selecting
+      if (req.body.college === '') {
+        college = ''
+      } else {
+        college = req.body.college || req.session.filter.college
+        if (!collegeList.includes(college)) {
+          college = ''
+        }
+      }
+
+      const subjectList = await this.getSubjectList(
+        year,
+        semester,
+        campus,
+        mainCourse,
+        college
+      )
+
+      let subject
+      if (req.body.subject === '') {
+        subject = ''
+      } else {
+        subject = req.body.subject || req.session.filter.subject
+        if (!subjectList.includes(subject)) {
+          subject = ''
+        }
+      }
+
+      // update to new filter value
+      req.session.filter = {
+        year: year,
+        semester: semester,
+        campus: campus,
+        mainCourse: mainCourse
+      }
+
+      const responseBody: UpdateFilterResponseBody = {
+        filterList: {
+          year: yearList,
+          semester: semesterList,
+          campus: campusList,
+          mainCourse: mainCourseList,
+          college: collegeList,
+          subject: subjectList
+        },
+        filterValue: {
+          year: year,
+          semester: semester,
+          campus: campus,
+          mainCourse: mainCourse
+        }
+      }
+
+      if (college) {
+        responseBody.filterValue.college = college
+        req.session.filter.college = college
+      }
+
+      if (subject) {
+        responseBody.filterValue.subject = subject
+        req.session.filter.subject = subject
+      }
+
+      return res.status(200).json(responseBody)
     }
   }
 
