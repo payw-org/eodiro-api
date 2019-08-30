@@ -6,6 +6,37 @@ import { UniversityDoc } from 'Database/schemas/university'
 import { ClassListDoc } from 'Database/schemas/class-list'
 import Class from 'Database/models/class'
 
+interface FilterList {
+  year: string[]
+  semester: string[]
+  campus: string[]
+  mainCourse: string[]
+  college: string[]
+  subject: string[]
+}
+
+interface DefaultFilterValue {
+  year: string
+  semester: string
+  campus: string
+  mainCourse: string
+}
+
+interface UpdatedFilterValue extends DefaultFilterValue {
+  college?: string
+  subject?: string
+}
+
+interface GetFilterResponseBody {
+  filterList: FilterList
+  filterDefault: DefaultFilterValue
+}
+
+interface UpdateFilterResponseBody {
+  filterList: FilterList
+  filterValue: UpdatedFilterValue
+}
+
 const semesterPriorityTable = {
   겨울: 0,
   2: 1,
