@@ -2,7 +2,8 @@ import helmet from 'helmet'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import session from 'express-session'
-import uuidv5 from 'uuid/v5'
+import uuidV1 from 'uuid/v1'
+import uuidV5 from 'uuid/v5'
 import connectMongo from 'connect-mongo'
 import mongoose from 'mongoose'
 import express, { Express } from 'express'
@@ -29,7 +30,7 @@ export default class RouteServiceProvider {
     bodyParser.urlencoded({ extended: true }),
     session({
       genid: () => {
-        return uuidv5(process.env.UUID_DNS, uuidv5.DNS)
+        return uuidV5(uuidV1(), uuidV5.DNS)
       },
       secret: process.env.SESSION_SECRET,
       resave: false,
