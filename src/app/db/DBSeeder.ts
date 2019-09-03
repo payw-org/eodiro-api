@@ -1,8 +1,7 @@
 import { GlobalNameDoc } from 'Database/schemas/global-name'
 import metadataSeoulJSON from 'Resources/metadata/cau-seoul.json'
-// import metadataAnseongJSON from 'Resources/metadata/cau-anseong.json'
-import classesSeoulJSON from 'Resources/classes/cau-seoul.json'
-// import classesAnseongJSON from 'Resources/classes/cau-anseong.json'
+import classesSeoulUnderJSON from 'Resources/classes/cau-seoul-학부.json'
+import classesSeoulGradJSON from 'Resources/classes/cau-seoul-대학원.json'
 import University from 'Database/models/university'
 import ClassList from 'Database/models/class-list'
 import Building from 'Database/models/building'
@@ -44,17 +43,14 @@ export default class DBSeeder {
   /**
    * Seed(resource) data for metadata
    */
-  private metadataSeed: UnivMetaJSON[] = [
-    metadataSeoulJSON as UnivMetaJSON
-    // metadataAnseongJSON as UnivMetaJSON
-  ]
+  private metadataSeed: UnivMetaJSON[] = [metadataSeoulJSON as UnivMetaJSON]
 
   /**
    * Seed(resource) data for classes
    */
   private classesSeed: ClassesJSON[] = [
-    classesSeoulJSON as ClassesJSON
-    // classesAnseongJSON as ClassesJSON
+    classesSeoulUnderJSON as ClassesJSON,
+    classesSeoulGradJSON as ClassesJSON
   ]
 
   /**
