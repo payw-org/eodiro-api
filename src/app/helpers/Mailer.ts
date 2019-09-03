@@ -8,7 +8,7 @@ export default class Mailer {
   private static transporter: Transporter = nodeMailer.createTransport({
     service: process.env.MAIL_SERVICE,
     host: process.env.MAIL_HOST,
-    port: Number(process.env.MAIL_PORT),
+    port: parseInt(process.env.MAIL_PORT),
     secure: true,
     auth: {
       user: process.env.MAIL_USERNAME,
