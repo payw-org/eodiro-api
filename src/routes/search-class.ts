@@ -1,21 +1,26 @@
 import express from 'express'
-import FilterController from 'Http/controllers/search-class/FilterController'
 import RequestValidationError from 'Http/middleware/RequestValidationError'
+import SearchController from 'Http/controllers/search-class/SearchController'
 
 const router = express.Router({ mergeParams: true })
 
 /**
  * Controller
  */
-// get filter list and default value
-router.get('/filter', FilterController.get())
-
-// partial update to the filter value
-router.patch(
-  '/filter',
-  FilterController.validateUpdate(),
+// get filter and default class list
+router.get(
+  '/',
+  SearchController.validateGet(),
   RequestValidationError.handler(),
-  FilterController.update()
+  SearchController.get()
+)
+
+// partial update filter or search word
+router.patch(
+  '/',
+  SearchController.validateUpdate(),
+  RequestValidationError.handler(),
+  SearchController.update()
 )
 
 export default router
