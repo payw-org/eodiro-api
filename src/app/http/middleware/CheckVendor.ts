@@ -1,6 +1,6 @@
 import { Response, NextHandler } from 'Http/RequestHandler'
 import University from 'Database/models/university'
-import logger from 'Configs/log'
+import LogHelper from 'Helpers/LogHelper'
 
 export default class CheckVendor {
   /**
@@ -16,10 +16,10 @@ export default class CheckVendor {
         { _id: 1 },
         err => {
           if (err) {
-            logger.error(err)
+            LogHelper.log('error', err)
           }
         }
-      )
+      ).lean()
 
       // if not found
       if (!university) {

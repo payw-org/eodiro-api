@@ -2,7 +2,7 @@ import { Response, NextHandler } from 'Http/RequestHandler'
 
 export default class Locale {
   private static supportedCodes = [
-    'kr', // main language
+    'kr', // default language
     'en'
   ]
 
@@ -13,7 +13,7 @@ export default class Locale {
     return (req, res, next): Response | void => {
       // check if language code is not set
       if (!Object.prototype.hasOwnProperty.call(req.body, 'language')) {
-        req.body.language = this.supportedCodes[0] // set to main language
+        req.body.language = this.supportedCodes[0] // set to default language
 
         return next()
       }

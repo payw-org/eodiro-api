@@ -1,6 +1,6 @@
 import University from 'Database/models/university'
 import DBSeeder from 'DB/DBSeeder'
-import EmptyCount from 'Database/models/empty_count'
+import EmptyCount from 'Database/models/empty-count'
 
 export default class DBInitializer {
   private dbSeeder: DBSeeder
@@ -18,6 +18,7 @@ export default class DBInitializer {
     if (univCount === 0) {
       await this.dbSeeder.seedMetadata()
       await this.dbSeeder.seedClasses()
+      await this.dbSeeder.linkClassesOfCurrentSemester()
     }
 
     await this.calcEmptyCounts()

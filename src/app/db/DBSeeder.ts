@@ -1,19 +1,23 @@
-import { GlobalNameDoc } from 'Database/schemas/global_name'
-import metadataSeoulJSON from 'Resources/metadata/cau_seoul.json'
-import metadataAnseongJSON from 'Resources/metadata/cau_anseong.json'
-import classesSeoulJSON from 'Resources/classes/cau_seoul.json'
-import classesAnseongJSON from 'Resources/classes/cau_anseong.json'
+import { GlobalNameDoc } from 'Database/schemas/global-name'
+import metadataSeoulJSON from 'Resources/metadata/cau-seoul.json'
+import classesSeoulUnderJSON from 'Resources/classes/cau-seoul-학부.json'
+import classesSeoulGradJSON from 'Resources/classes/cau-seoul-대학원.json'
 import University from 'Database/models/university'
+import ClassList from 'Database/models/class-list'
 import Building from 'Database/models/building'
 import Class from 'Database/models/class'
-import logger from 'Configs/log'
 import { ClassDoc } from 'Database/schemas/class'
 import Floor from 'Database/models/floor'
 import Classroom from 'Database/models/classroom'
 import Lecture from 'Database/models/lecture'
+import LogHelper from 'Helpers/LogHelper'
+import { ClassListDoc } from 'Database/schemas/class-list'
 
 interface ClassesJSON {
+  year: string
+  semester: string
   vendor: string
+  mainCourse: string
   classes: ClassDoc[]
 }
 
@@ -29,21 +33,24 @@ interface UnivMetaJSON {
   buildings: BldgMetaJSON[]
 }
 
+// Set the current semester with this.
+const currentSemester = {
+  year: '2019',
+  semester: '2'
+}
+
 export default class DBSeeder {
   /**
    * Seed(resource) data for metadata
    */
-  private metadataSeed: UnivMetaJSON[] = [
-    metadataSeoulJSON as UnivMetaJSON,
-    metadataAnseongJSON as UnivMetaJSON
-  ]
+  private metadataSeed: UnivMetaJSON[] = [metadataSeoulJSON as UnivMetaJSON]
 
   /**
    * Seed(resource) data for classes
    */
   private classesSeed: ClassesJSON[] = [
-    classesSeoulJSON as ClassesJSON,
-    classesAnseongJSON as ClassesJSON
+    classesSeoulUnderJSON as ClassesJSON,
+    classesSeoulGradJSON as ClassesJSON
   ]
 
   /**
@@ -92,21 +99,59 @@ export default class DBSeeder {
           // create classes
           const classes = (await Class.insertMany(seed.classes)) as ClassDoc[]
 
+          // create class list
+          const classList = (await ClassList.create({
+            year: seed.year,
+            semester: seed.semester,
+            mainCourse: seed.mainCourse,
+            classes: classes
+          })) as ClassListDoc
+
           // link classes to university
           await University.findOneAndUpdate(
             { vendor: seed.vendor },
-            { classes: classes },
-            { new: true }
+            {
+              $push: {
+                classLists: classList._id
+              }
+            }
           )
         } catch (err) {
-          logger.error('Class save error: ' + err)
+          LogHelper.log('error', 'Class save error: ' + err)
         }
       })
     )
+  }
 
-    const classes = (await Class.find()) as ClassDoc[]
-    // create floors, classrooms, lectures
+  /**
+   * Create floors, classrooms and lectures using current semester's class documents.
+   */
+  public async linkClassesOfCurrentSemester(): Promise<void> {
+    // get all current semester's classes
+    const classLists = (await ClassList.find(
+      { year: currentSemester.year, semester: currentSemester.semester },
+      { classes: 1 }
+    )
+      .lean()
+      .populate({
+        path: 'classes',
+        select: '_id closed locations times'
+      })) as ClassListDoc[]
+
+    // gather classes
+    const classes: ClassDoc[] = []
+    for (const classList of classLists) {
+      classes.push(...(classList.classes as ClassDoc[]))
+    }
+
+    const unregisteredBldgSet = new Set()
+
     for (const cls of classes) {
+      // skip closed class
+      if (cls.closed) {
+        continue
+      }
+
       for (let i = 0; i < cls.locations.length; i++) {
         const location = cls.locations[i]
 
@@ -116,7 +161,13 @@ export default class DBSeeder {
         // find class building
         const building = await Building.findOne({
           number: location.building
-        })
+        }).lean()
+
+        // skip unregistered building
+        if (building === null) {
+          unregisteredBldgSet.add(location.building)
+          continue
+        }
 
         // find class floor
         // if not exist, create floor
@@ -124,7 +175,7 @@ export default class DBSeeder {
           { building: building._id, number: floorNum },
           { building: building._id, number: floorNum },
           { upsert: true, new: true }
-        )
+        ).lean()
 
         // link floor to building
         await Building.findByIdAndUpdate(building._id, {
@@ -137,7 +188,7 @@ export default class DBSeeder {
           { floor: floor._id, number: location.room },
           { floor: floor._id, number: location.room },
           { upsert: true, new: true }
-        )
+        ).lean()
 
         // link classroom to floor
         await Floor.findByIdAndUpdate(floor._id, {
@@ -157,17 +208,31 @@ export default class DBSeeder {
         })
       }
     }
+
+    // log unregistered buildings
+    if (unregisteredBldgSet.size !== 0) {
+      LogHelper.log(
+        'warn',
+        'Buildings `' +
+          Array.from(unregisteredBldgSet)
+            .sort()
+            .join(', ') +
+          '` are unregistered.'
+      )
+    }
   }
 
   /**
    * Apply refreshed seed data.
+   *
+   * @deprecated
    */
   public async refreshMetadataAndClasses(): Promise<void> {
     // delete all documents about metadata and classes
     await Promise.all([
+      Class.deleteMany({}),
       University.deleteMany({}),
       Building.deleteMany({}),
-      Class.deleteMany({}),
       Floor.deleteMany({}),
       Classroom.deleteMany({}),
       Lecture.deleteMany({})
@@ -176,5 +241,6 @@ export default class DBSeeder {
     // re-seeding
     await this.seedMetadata()
     await this.seedClasses()
+    await this.linkClassesOfCurrentSemester()
   }
 }

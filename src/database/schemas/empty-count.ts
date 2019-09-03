@@ -8,7 +8,7 @@
 import mongoose, { Document } from 'mongoose'
 import emptyBuildingSchema, {
   EmptyBuildingDoc
-} from 'Database/schemas/empty_building'
+} from 'Database/schemas/empty-building'
 
 export interface EmptyCountDoc extends Document {
   time: Date

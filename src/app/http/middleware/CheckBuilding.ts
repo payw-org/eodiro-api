@@ -1,6 +1,6 @@
 import { Response, NextHandler } from 'Http/RequestHandler'
 import Building from 'Database/models/building'
-import logger from 'Configs/log'
+import LogHelper from 'Helpers/LogHelper'
 
 export default class CheckBuilding {
   /**
@@ -17,10 +17,10 @@ export default class CheckBuilding {
         { _id: 1 },
         err => {
           if (err) {
-            logger.error(err)
+            LogHelper.log('error', err)
           }
         }
-      )
+      ).lean()
 
       // if not found
       if (!building) {
