@@ -1,18 +1,22 @@
 import helmet from 'helmet'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-import session from 'express-session'
-import uuidV1 from 'uuid/v1'
-import uuidV5 from 'uuid/v5'
-import connectMongo from 'connect-mongo'
-import mongoose from 'mongoose'
 import express, { Express } from 'express'
 import router from 'Routes/api'
 import HandleClientError from 'Http/middleware/HandleClientError'
 import HandleServerError from 'Http/middleware/HandleServerError'
 import HandleSyntaxError from 'Http/middleware/HandleSyntaxError'
 
-const MongoStore = connectMongo(session)
+/**
+ * Deprecate session usage
+ */
+// import mongoose from 'mongoose'
+// import session from 'express-session'
+// import uuidV1 from 'uuid/v1'
+// import uuidV5 from 'uuid/v5'
+// import connectMongo from 'connect-mongo'
+
+// const MongoStore = connectMongo(session)
 
 export default class RouteServiceProvider {
   /**
@@ -27,20 +31,23 @@ export default class RouteServiceProvider {
     helmet(),
     cors(),
     bodyParser.json(),
-    bodyParser.urlencoded({ extended: true }),
-    session({
-      genid: () => {
-        return uuidV5(uuidV1(), uuidV5.DNS)
-      },
-      secret: process.env.SESSION_SECRET,
-      resave: false,
-      saveUninitialized: true,
-      name: process.env.SESSION_NAME,
-      store: new MongoStore({ mongooseConnection: mongoose.connection }),
-      cookie: {
-        secure: true
-      }
-    })
+    bodyParser.urlencoded({ extended: true })
+    /**
+     * Deprecate session usage
+     */
+    // session({
+    //   genid: () => {
+    //     return uuidV5(uuidV1(), uuidV5.DNS)
+    //   },
+    //   secret: process.env.SESSION_SECRET,
+    //   resave: false,
+    //   saveUninitialized: true,
+    //   name: process.env.SESSION_NAME,
+    //   store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    //   cookie: {
+    //     secure: true
+    //   }
+    // })
   ]
 
   /**
