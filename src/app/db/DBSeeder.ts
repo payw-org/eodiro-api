@@ -135,7 +135,7 @@ export default class DBSeeder {
       .lean()
       .populate({
         path: 'classes',
-        select: '_id closed locations'
+        select: '_id closed locations times'
       })) as ClassListDoc[]
 
     // gather classes
