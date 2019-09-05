@@ -16,9 +16,7 @@ export default class DBInitializer {
     // check if collection about vacant is empty, seed data.
     const univCount = await University.estimatedDocumentCount()
     if (univCount === 0) {
-      await this.classSeeder.seedMetadata()
-      await this.classSeeder.seedClasses()
-      await this.classSeeder.linkClassesOfCurrentSemester()
+      await this.classSeeder.run()
     }
 
     await this.calcEmptyCounts()

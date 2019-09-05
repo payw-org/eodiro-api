@@ -54,6 +54,15 @@ export default class ClassSeeder {
   ]
 
   /**
+   * Seed the data associated with class.
+   */
+  public async run(): Promise<void> {
+    await this.seedMetadata()
+    await this.seedClasses()
+    await this.linkClassesOfCurrentSemester()
+  }
+
+  /**
    * Seed the collection of university and building.
    */
   public async seedMetadata(): Promise<void> {
