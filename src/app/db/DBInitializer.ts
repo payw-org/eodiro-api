@@ -1,12 +1,12 @@
 import University from 'Database/models/university'
-import DBSeeder from 'DB/DBSeeder'
+import ClassSeeder from 'DB/ClassSeeder'
 import EmptyCount from 'Database/models/empty-count'
 
 export default class DBInitializer {
-  private dbSeeder: DBSeeder
+  private classSeeder: ClassSeeder
 
   public constructor() {
-    this.dbSeeder = new DBSeeder()
+    this.classSeeder = new ClassSeeder()
   }
 
   /**
@@ -16,9 +16,9 @@ export default class DBInitializer {
     // check if collection about vacant is empty, seed data.
     const univCount = await University.estimatedDocumentCount()
     if (univCount === 0) {
-      await this.dbSeeder.seedMetadata()
-      await this.dbSeeder.seedClasses()
-      await this.dbSeeder.linkClassesOfCurrentSemester()
+      await this.classSeeder.seedMetadata()
+      await this.classSeeder.seedClasses()
+      await this.classSeeder.linkClassesOfCurrentSemester()
     }
 
     await this.calcEmptyCounts()

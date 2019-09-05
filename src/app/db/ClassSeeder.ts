@@ -39,7 +39,7 @@ const currentSemester = {
   semester: '2'
 }
 
-export default class DBSeeder {
+export default class ClassSeeder {
   /**
    * Seed(resource) data for metadata
    */
