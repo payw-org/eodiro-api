@@ -65,7 +65,7 @@ export default class ClassSeeder {
   /**
    * Seed the collection of university and building.
    */
-  public async seedMetadata(): Promise<void> {
+  private async seedMetadata(): Promise<void> {
     // asynchronously seed metadata
     await Promise.all(
       this.metadataSeed.map(async (seed: UnivMetaJSON) => {
@@ -100,7 +100,7 @@ export default class ClassSeeder {
   /**
    * Seed the collection of class, floor, classroom, lecture.
    */
-  public async seedClasses(): Promise<void> {
+  private async seedClasses(): Promise<void> {
     // asynchronously seed classes
     await Promise.all(
       this.classesSeed.map(async (seed: ClassesJSON) => {
@@ -135,7 +135,7 @@ export default class ClassSeeder {
   /**
    * Create floors, classrooms and lectures using current semester's class documents.
    */
-  public async linkClassesOfCurrentSemester(): Promise<void> {
+  private async linkClassesOfCurrentSemester(): Promise<void> {
     // get all current semester's classes
     const classLists = (await ClassList.find(
       { year: currentSemester.year, semester: currentSemester.semester },
