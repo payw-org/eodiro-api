@@ -1,4 +1,3 @@
-import University from 'Database/models/university'
 import ClassSeeder from 'DB/ClassSeeder'
 import EmptyCount from 'Database/models/empty-count'
 import MealSeeder from 'DB/MealSeeder'
@@ -21,7 +20,7 @@ export default class DBInitializer {
     promises.push(this.classSeeder.run())
     promises.push(this.mealSeeder.run())
 
-    await Promise.all(promises)
+    await Promise.all(promises) // asynchronously seeding
     await this.calcEmptyCounts()
   }
 
