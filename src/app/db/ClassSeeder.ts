@@ -57,9 +57,14 @@ export default class ClassSeeder {
    * Seed the data associated with class.
    */
   public async run(): Promise<void> {
-    await this.seedMetadata()
-    await this.seedClasses()
-    await this.linkClassesOfCurrentSemester()
+    const univCount = await University.estimatedDocumentCount()
+
+    // if vacant collection is empty, then seed data.
+    if (univCount === 0) {
+      await this.seedMetadata()
+      await this.seedClasses()
+      await this.linkClassesOfCurrentSemester()
+    }
   }
 
   /**

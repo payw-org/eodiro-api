@@ -13,12 +13,10 @@ export default class DBInitializer {
    * Initialize database.
    */
   public async initialize(): Promise<void> {
-    // check if collection about vacant is empty, seed data.
-    const univCount = await University.estimatedDocumentCount()
-    if (univCount === 0) {
-      await this.classSeeder.run()
-    }
+    const promises = []
+    promises.push(this.classSeeder.run())
 
+    await Promise.all(promises)
     await this.calcEmptyCounts()
   }
 
