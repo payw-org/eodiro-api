@@ -16,9 +16,9 @@ export default class MealSeeder {
    */
   public async run(): Promise<void> {
     // get most recent meal
-    const recentMeal = (await DayMeal.findOne({}, { _id: 0, date: 1 }).sort(
-      '-date'
-    )) as DayMealDoc
+    const recentMeal = (await DayMeal.findOne({}, { _id: 0, date: 1 })
+      .lean()
+      .sort('-date')) as DayMealDoc
 
     // if meals are empty
     if (recentMeal === null) {
