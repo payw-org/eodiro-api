@@ -4,7 +4,7 @@ import LogHelper from 'Helpers/LogHelper'
 
 export default class CheckVendor {
   /**
-   * Check if vendor is not exist and get university id.
+   * Check if vendor is not exist and pass university id.
    */
   public static handler(): NextHandler {
     return async (req, res, next): Promise<Response | void> => {

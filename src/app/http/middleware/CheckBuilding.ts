@@ -4,7 +4,7 @@ import LogHelper from 'Helpers/LogHelper'
 
 export default class CheckBuilding {
   /**
-   * Check if building is not exist and get building id.
+   * Check if building is not exist and pass building id.
    */
   public static handler(): NextHandler {
     return async (req, res, next): Promise<Response | void> => {

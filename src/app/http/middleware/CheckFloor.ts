@@ -4,7 +4,7 @@ import LogHelper from 'Helpers/LogHelper'
 
 export default class CheckFloor {
   /**
-   * Check if floor is not exist and get floor id.
+   * Check if floor is not exist and pass floor id.
    */
   public static handler(): NextHandler {
     return async (req, res, next): Promise<Response | void> => {
