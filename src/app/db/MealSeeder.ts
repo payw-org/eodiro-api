@@ -1,7 +1,8 @@
-import CAUFoodScraper, { Data } from '@payw/cau-food-scraper'
+import CAUFoodScraper, { ScrapedData } from '@payw/cau-food-scraper'
 import DayMeal from 'Database/models/day-meal'
 import LogHelper from 'Helpers/LogHelper'
 import { DayMealDoc } from 'Database/schemas/day-meal'
+import University from 'Database/models/university'
 
 const dayScope = 5
 
@@ -9,7 +10,7 @@ export default class MealSeeder {
   /**
    * Seed(resource) data for meals
    */
-  private mealsSeed: Data
+  private mealsSeed: ScrapedData[] = []
 
   /**
    * Scrape meals and seed it to database.
@@ -50,11 +51,13 @@ export default class MealSeeder {
    * Scrape meal list from website
    */
   private async scrapeMeals(): Promise<void> {
-    this.mealsSeed = await CAUFoodScraper({
-      id: process.env.FOOD_SCRAPER_ID,
-      pw: process.env.FOOD_SCRAPER_PASSWORD,
-      days: dayScope
-    })
+    this.mealsSeed.push(
+      await CAUFoodScraper({
+        id: process.env.FOOD_SCRAPER_ID,
+        pw: process.env.FOOD_SCRAPER_PASSWORD,
+        days: dayScope
+      })
+    )
   }
 
   /**
@@ -63,10 +66,22 @@ export default class MealSeeder {
   private async seedMeals(): Promise<void> {
     await DayMeal.deleteMany({}) // delete old meals
 
-    try {
-      await DayMeal.insertMany(this.mealsSeed) // seed new
-    } catch (err) {
-      LogHelper.log('error', 'Meal save error: ' + err)
-    }
+    // asynchronously seed meals
+    await Promise.all(
+      this.mealsSeed.map(async (seed: ScrapedData) => {
+        try {
+          // create meals
+          const meals = (await DayMeal.insertMany(seed.days)) as DayMealDoc[]
+
+          // link meals to university
+          await University.findOneAndUpdate(
+            { vendor: seed.campus },
+            { meals: meals }
+          )
+        } catch (err) {
+          LogHelper.log('error', 'Meal save error: ' + err)
+        }
+      })
+    )
   }
 }
