@@ -6,13 +6,19 @@ import vacantRouter from 'Routes/vacant'
 import inquiryRouter from 'Routes/inquiry'
 import searchClassRouter from 'Routes/./search-class'
 import mealRouter from 'Routes/meal'
+import RequestValidationError from 'Http/middleware/RequestValidationError'
 
 const router = express.Router()
 
 /**
  * Middleware
  */
-router.use('/campuses/:vendor', CheckVendorMiddleware.handler())
+router.use(
+  '/campuses/:vendor',
+  CheckVendorMiddleware.validate(),
+  RequestValidationError.handler(),
+  CheckVendorMiddleware.handler()
+)
 
 /**
  * Sub router
