@@ -1,8 +1,25 @@
 import { Response, NextHandler } from 'Http/RequestHandler'
 import Building from 'Database/models/building'
 import LogHelper from 'Helpers/LogHelper'
+import { checkSchema, ValidationChain } from 'express-validator'
 
 export default class CheckBuilding {
+  /**
+   * Validate middleware request.
+   */
+  public static validate(): ValidationChain[] {
+    return checkSchema({
+      building: {
+        exists: true,
+        in: 'params',
+        isString: true,
+        trim: true,
+        escape: true,
+        errorMessage: '`building` must be string.'
+      }
+    })
+  }
+
   /**
    * Check if building is not exist and pass building id.
    */
