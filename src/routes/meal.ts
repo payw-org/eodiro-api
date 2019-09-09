@@ -1,13 +1,19 @@
 import express from 'express'
 import MealsController from 'Http/controllers/meal/MealsController'
 import CheckMealDate from 'Http/middleware/CheckMealDate'
+import RequestValidationError from 'Http/middleware/RequestValidationError'
 
 const router = express.Router({ mergeParams: true })
 
 /**
  * Middleware
  */
-router.use('/dates/:date', CheckMealDate.handler())
+router.use(
+  '/dates/:date',
+  CheckMealDate.validate(),
+  RequestValidationError.handler(),
+  CheckMealDate.handler()
+)
 
 /**
  * Controller

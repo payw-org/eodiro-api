@@ -2,8 +2,34 @@ import { Response, NextHandler } from 'Http/RequestHandler'
 import University from 'Database/models/university'
 import { UniversityDoc } from 'Database/schemas/university'
 import { DayMealDoc } from 'Database/schemas/day-meal'
+import { checkSchema, ValidationChain } from 'express-validator'
 
 export default class CheckMealDate {
+  /**
+   * Validate middleware request.
+   */
+  public static validate(): ValidationChain[] {
+    return checkSchema({
+      date: {
+        exists: true,
+        in: 'params',
+        isString: true,
+        trim: true,
+        escape: true,
+        isISO8601: true,
+        custom: {
+          options: (value: string): boolean => {
+            const dateRegexp = /^\d{4}-\d{2}-\d{2}$/
+
+            return !!dateRegexp.exec(value)
+          },
+          errorMessage: '`date` must be yyyy-mm-dd format'
+        },
+        errorMessage: '`date` must be date type.'
+      }
+    })
+  }
+
   /**
    * Check if the meal is not exist and pass the meal id.
    */
