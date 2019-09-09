@@ -9,6 +9,7 @@ import mongoose, { Document } from 'mongoose'
 import globalNameSchema, { GlobalNameDoc } from './global-name'
 import { BuildingDoc } from './building'
 import { ClassListDoc } from 'Database/schemas/class-list'
+import { DayMealDoc } from 'Database/schemas/day-meal'
 
 export interface UniversityDoc extends Document {
   name: GlobalNameDoc
@@ -16,6 +17,7 @@ export interface UniversityDoc extends Document {
   vendor: string
   buildings: Array<string | BuildingDoc>
   classLists: Array<string | ClassListDoc>
+  meals: Array<string | DayMealDoc>
 }
 
 const universitySchema = new mongoose.Schema({
@@ -27,6 +29,9 @@ const universitySchema = new mongoose.Schema({
   ],
   classLists: [
     { type: mongoose.Schema.Types.ObjectId, ref: 'ClassList', required: true }
+  ],
+  meals: [
+    { type: mongoose.Schema.Types.ObjectId, ref: 'DayMeal', required: true }
   ]
 })
 

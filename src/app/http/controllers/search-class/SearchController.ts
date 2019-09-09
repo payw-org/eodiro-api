@@ -663,13 +663,13 @@ export default class SearchController {
       return searchReturn
     }
 
-    const classesId = (university.classLists[0] as ClassListDoc).classes
+    const classIds = (university.classLists[0] as ClassListDoc).classes
 
     let classes: ClassDoc[]
     if (word === '') {
       classes = await Class.find(
         {
-          _id: { $in: classesId },
+          _id: { $in: classIds },
           college: filter.college || /.*/g,
           subject: filter.subject || /.*/g
         },
@@ -681,7 +681,7 @@ export default class SearchController {
     } else {
       classes = await Class.find(
         {
-          _id: { $in: classesId },
+          _id: { $in: classIds },
           college: filter.college || /.*/g,
           subject: filter.subject || /.*/g
         },

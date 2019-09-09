@@ -1,10 +1,27 @@
 import { Response, NextHandler } from 'Http/RequestHandler'
 import Floor from 'Database/models/floor'
 import LogHelper from 'Helpers/LogHelper'
+import { checkSchema, ValidationChain } from 'express-validator'
 
 export default class CheckFloor {
   /**
-   * Check if floor is not exist and get floor id.
+   * Validate middleware request.
+   */
+  public static validate(): ValidationChain[] {
+    return checkSchema({
+      floor: {
+        exists: true,
+        in: 'params',
+        isString: true,
+        trim: true,
+        escape: true,
+        errorMessage: '`floor` must be string.'
+      }
+    })
+  }
+
+  /**
+   * Check if floor is not exist and pass floor id.
    */
   public static handler(): NextHandler {
     return async (req, res, next): Promise<Response | void> => {

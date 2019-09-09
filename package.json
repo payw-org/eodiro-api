@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/payasyouwant/eodiro-api#readme",
   "dependencies": {
+    "@payw/cau-food-scraper": "^1.1.3",
     "body-parser": "^1.19.0",
     "bottleneck": "^2.19.5",
     "connect-mongo": "^3.0.0",

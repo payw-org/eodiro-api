@@ -10,6 +10,9 @@ import EmptyCount, {
 } from 'Database/models/empty-count'
 import TimeManager from 'Helpers/TimeManager'
 
+const secondForSave = 30
+const secondForDelete = 15
+
 export default class EmptyCountScheduler {
   /**
    * Schedule the jobs associated with empty classroom count.
@@ -26,7 +29,7 @@ export default class EmptyCountScheduler {
   private static scheduleSaveJob(): void {
     const rule = new schedule.RecurrenceRule()
     rule.minute = new schedule.Range(0, 59, tickMin)
-    rule.second = 30
+    rule.second = secondForSave
 
     schedule.scheduleJob(rule, () => {
       if (
@@ -52,7 +55,7 @@ export default class EmptyCountScheduler {
   private static scheduleDeleteJob(): void {
     const rule = new schedule.RecurrenceRule()
     rule.minute = new schedule.Range(0, 59, tickMin)
-    rule.second = 15
+    rule.second = secondForDelete
 
     schedule.scheduleJob(rule, () => {
       if (

@@ -1,34 +1,40 @@
-import University from 'Database/models/university'
-import DBSeeder from 'DB/DBSeeder'
+import ClassSeeder from 'DB/ClassSeeder'
+import MealSeeder from 'DB/MealSeeder'
+import MetadataSeeder from 'DB/MetadataSeeder'
 import EmptyCount from 'Database/models/empty-count'
 
 export default class DBInitializer {
-  private dbSeeder: DBSeeder
+  private metadataSeeder: MetadataSeeder
+
+  private classSeeder: ClassSeeder
+
+  private mealSeeder: MealSeeder
 
   public constructor() {
-    this.dbSeeder = new DBSeeder()
+    this.metadataSeeder = new MetadataSeeder()
+    this.classSeeder = new ClassSeeder()
+    this.mealSeeder = new MealSeeder()
   }
 
   /**
    * Initialize database.
    */
   public async initialize(): Promise<void> {
-    // check if collection about vacant is empty, seed data.
-    const univCount = await University.estimatedDocumentCount()
-    if (univCount === 0) {
-      await this.dbSeeder.seedMetadata()
-      await this.dbSeeder.seedClasses()
-      await this.dbSeeder.linkClassesOfCurrentSemester()
-    }
+    await this.metadataSeeder.run()
 
-    await this.calcEmptyCounts()
+    const promises = []
+    promises.push(this.classSeeder.run())
+    promises.push(this.mealSeeder.run())
+    await Promise.all(promises) // asynchronously seeding
+
+    await this.calculateEmptyCounts()
   }
 
   /**
    * Delete all previous empty classroom counts.
    * Calculate and save empty classroom counts in advance.
    */
-  private async calcEmptyCounts(): Promise<void> {
+  private async calculateEmptyCounts(): Promise<void> {
     await EmptyCount.deletePrevCounts()
     await EmptyCount.saveCurrentCount()
     await EmptyCount.saveNextCount()

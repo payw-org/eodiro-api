@@ -1,5 +1,3 @@
-import { GlobalNameDoc } from 'Database/schemas/global-name'
-import metadataSeoulJSON from 'Resources/metadata/cau-seoul.json'
 import classesSeoulUnderJSON from 'Resources/classes/cau-seoul-학부.json'
 import classesSeoulGradJSON from 'Resources/classes/cau-seoul-대학원.json'
 import University from 'Database/models/university'
@@ -21,30 +19,13 @@ interface ClassesJSON {
   classes: ClassDoc[]
 }
 
-interface BldgMetaJSON {
-  number: string
-  name: string
-}
-
-interface UnivMetaJSON {
-  name: GlobalNameDoc
-  campus: GlobalNameDoc
-  vendor: string
-  buildings: BldgMetaJSON[]
-}
-
 // Set the current semester with this.
 const currentSemester = {
   year: '2019',
   semester: '2'
 }
 
-export default class DBSeeder {
-  /**
-   * Seed(resource) data for metadata
-   */
-  private metadataSeed: UnivMetaJSON[] = [metadataSeoulJSON as UnivMetaJSON]
-
+export default class ClassSeeder {
   /**
    * Seed(resource) data for classes
    */
@@ -54,44 +35,22 @@ export default class DBSeeder {
   ]
 
   /**
-   * Seed the collection of university and building.
+   * Seed the data associated with class.
    */
-  public async seedMetadata(): Promise<void> {
-    // asynchronously seed metadata
-    await Promise.all(
-      this.metadataSeed.map(async (seed: UnivMetaJSON) => {
-        // create university
-        const university = await University.create({
-          name: seed.name,
-          campus: seed.campus,
-          vendor: seed.vendor
-        })
+  public async run(): Promise<void> {
+    const classCount = await Class.estimatedDocumentCount()
 
-        // create buildings
-        const buildings = await Building.insertMany(seed.buildings)
-        // get building id list
-        const buildingsIds = buildings.map(bldg => {
-          return bldg._id
-        })
-
-        // link university to buildings
-        await Building.updateMany(
-          { _id: { $in: buildingsIds } },
-          { university: university._id }
-        )
-
-        // link buildings to university
-        await University.findByIdAndUpdate(university._id, {
-          buildings: buildings
-        })
-      })
-    )
+    // if class collection is empty, then seed data.
+    if (classCount === 0) {
+      await this.seedClasses()
+      await this.linkClassesOfCurrentSemester()
+    }
   }
 
   /**
    * Seed the collection of class, floor, classroom, lecture.
    */
-  public async seedClasses(): Promise<void> {
+  private async seedClasses(): Promise<void> {
     // asynchronously seed classes
     await Promise.all(
       this.classesSeed.map(async (seed: ClassesJSON) => {
@@ -126,7 +85,7 @@ export default class DBSeeder {
   /**
    * Create floors, classrooms and lectures using current semester's class documents.
    */
-  public async linkClassesOfCurrentSemester(): Promise<void> {
+  private async linkClassesOfCurrentSemester(): Promise<void> {
     // get all current semester's classes
     const classLists = (await ClassList.find(
       { year: currentSemester.year, semester: currentSemester.semester },
@@ -220,27 +179,5 @@ export default class DBSeeder {
           '` are unregistered.'
       )
     }
-  }
-
-  /**
-   * Apply refreshed seed data.
-   *
-   * @deprecated
-   */
-  public async refreshMetadataAndClasses(): Promise<void> {
-    // delete all documents about metadata and classes
-    await Promise.all([
-      Class.deleteMany({}),
-      University.deleteMany({}),
-      Building.deleteMany({}),
-      Floor.deleteMany({}),
-      Classroom.deleteMany({}),
-      Lecture.deleteMany({})
-    ])
-
-    // re-seeding
-    await this.seedMetadata()
-    await this.seedClasses()
-    await this.linkClassesOfCurrentSemester()
   }
 }

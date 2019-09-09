@@ -1,10 +1,28 @@
 import { Response, NextHandler } from 'Http/RequestHandler'
 import University from 'Database/models/university'
 import LogHelper from 'Helpers/LogHelper'
+import { checkSchema, ValidationChain } from 'express-validator'
 
 export default class CheckVendor {
   /**
-   * Check if vendor is not exist and get university id.
+   * Validate middleware request.
+   */
+  public static validate(): ValidationChain[] {
+    return checkSchema({
+      vendor: {
+        exists: true,
+        in: 'params',
+        isString: true,
+        isLowercase: true,
+        trim: true,
+        escape: true,
+        errorMessage: '`vendor` must be all lowercase string.'
+      }
+    })
+  }
+
+  /**
+   * Check if vendor is not exist and pass university id.
    */
   public static handler(): NextHandler {
     return async (req, res, next): Promise<Response | void> => {
