@@ -32,14 +32,12 @@ router.use('/campuses/:vendor/meal', mealRouter)
  * Controller
  */
 // show campus list
-router.get('/campuses', LocaleMiddleware.handler(), CampusesController.index())
-
-// router.get('/test', (req, res) => {
-//   LogHelper.log('info', 'logger test')
-//
-//   res.json({
-//     result: 'good'
-//   })
-// })
+router.get(
+  '/campuses',
+  LocaleMiddleware.validate(),
+  RequestValidationError.handler(),
+  LocaleMiddleware.handler(),
+  CampusesController.index()
+)
 
 export default router
