@@ -6,8 +6,14 @@ See our [eodiro](https://github.com/payasyouwant/eodiro) repository.
 
 ## Core features
 
-- University's building info service
+- Vacant
 
-- Lecture info
+- Meal
 
-- Current total number of empty classroom
+- Search class
+
+- Inquiry
+
+## API Docs
+
+[See](https://documenter.getpostman.com/view/7378097/SVYtMHWp)
