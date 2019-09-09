@@ -1,20 +1,30 @@
 import mongoose from 'mongoose'
 import dbConfig from 'Configs/database'
-import logger from 'Configs/log'
+import LogHelper from 'Helpers/LogHelper'
 
 export default class DBConnector {
+  /**
+   * Connect to database and set connection event listeners.
+   */
   public async connect(): Promise<void> {
-    mongoose.connection.on('error', err => {
-      logger.info('Mongoose default connection has occured ' + err + ' error')
+    // open the database connection
+    await mongoose.connect(dbConfig.uri, {
+      useNewUrlParser: true,
+      useFindAndModify: false,
+      useCreateIndex: true
     })
 
-    await mongoose.connect(dbConfig.uri, {
-      useNewUrlParser: true
+    mongoose.connection.on('error', err => {
+      LogHelper.log(
+        'info',
+        'Mongoose default connection has occured ' + err + ' error'
+      )
     })
 
     process.on('SIGINT', () => {
       mongoose.connection.close(() => {
-        logger.error(
+        LogHelper.log(
+          'error',
           'Mongoose default connection is disconnected due to application termination'
         )
         process.exit(0)

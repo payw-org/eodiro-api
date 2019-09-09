@@ -1,12 +1,12 @@
 import { Response, SimpleHandler } from 'Http/RequestHandler'
 import Floor from 'Database/models/floor'
-import logger from 'Configs/log'
 import { FloorDoc } from 'Database/schemas/floor'
 import { ClassroomDoc } from 'Database/schemas/classroom'
 import { LectureDoc } from 'Database/schemas/lecture'
 import { ClassDoc } from 'Database/schemas/class'
 import LecturesComparator from 'Helpers/LecturesComparator'
 import { TimeDoc } from 'Database/schemas/time'
+import LogHelper from 'Helpers/LogHelper'
 
 export interface LectureInfo {
   name: string
@@ -33,22 +33,24 @@ export default class ClassroomsController {
         { _id: 0, classrooms: 1 },
         err => {
           if (err) {
-            logger.error(err)
+            LogHelper.log('error', err)
           }
         }
-      ).populate({
-        path: 'classrooms',
-        select: 'number lectures -_id',
-        options: { sort: { number: 1 } }, // sort by ascending order of classroom number
-        populate: {
-          path: 'lectures',
-          select: 'class order -_id',
+      )
+        .lean()
+        .populate({
+          path: 'classrooms',
+          select: 'number lectures -_id',
+          options: { sort: { number: 1 } }, // sort by ascending order of classroom number
           populate: {
-            path: 'class',
-            select: '-times._id -_id'
+            path: 'lectures',
+            select: 'class order -_id',
+            populate: {
+              path: 'class',
+              select: '-times._id -_id'
+            }
           }
-        }
-      })) as FloorDoc
+        })) as FloorDoc
 
       const classrooms = floor.classrooms as ClassroomDoc[]
 

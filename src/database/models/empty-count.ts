@@ -6,11 +6,11 @@
  */
 
 import mongoose, { Model } from 'mongoose'
-import emptyCountSchema, { EmptyCountDoc } from '../schemas/empty_count'
+import emptyCountSchema, { EmptyCountDoc } from '../schemas/empty-count'
 import TimeManager from 'Helpers/TimeManager'
 import EmptyClassroomHelper from 'Helpers/EmptyClassroomHelper'
-import { EmptyBuildingDoc } from 'Database/schemas/empty_building'
-import { EmptyFacilityDoc } from 'Database/schemas/empty_facility'
+import { EmptyBuildingDoc } from 'Database/schemas/empty-building'
+import { EmptyFacilityDoc } from 'Database/schemas/empty-facility'
 
 // define static methods which are frequently used for `EmptyCount` model
 interface EmptyCountModel extends Model<EmptyCountDoc> {
@@ -86,7 +86,7 @@ emptyCountSchema.statics.getCurrentCountOfBuilding = async function(
         'buildings.id': buildingId
       },
       { _id: 0, 'buildings.$': 1 }
-    )) as EmptyCountDoc
+    ).lean()) as EmptyCountDoc
   } else {
     // get last tick time's empty classroom count
     count = (await this.findOne(
@@ -95,7 +95,9 @@ emptyCountSchema.statics.getCurrentCountOfBuilding = async function(
         'buildings.id': buildingId
       },
       { _id: 0, 'buildings.$': 1 }
-    ).sort('-time')) as EmptyCountDoc
+    )
+      .lean()
+      .sort('-time')) as EmptyCountDoc
   }
 
   return count.buildings[0]

@@ -1,7 +1,7 @@
 import { Response, SimpleHandler } from 'Http/RequestHandler'
 import University from 'Database/models/university'
-import logger from 'Configs/log'
 import { UniversityDoc } from 'Database/schemas/university'
+import LogHelper from 'Helpers/LogHelper'
 
 interface CampusInfo {
   university: string
@@ -23,10 +23,12 @@ export default class CampusesController {
         { _id: 0, name: 1, campus: 1, vendor: 1 },
         err => {
           if (err) {
-            logger.error(err)
+            LogHelper.log('error', err)
           }
         }
-      ).sort([['name.' + language, 1]])) as UniversityDoc[]
+      )
+        .lean()
+        .sort([['name.' + language, 1]])) as UniversityDoc[]
 
       // if not exist
       if (universities.length === 0) {

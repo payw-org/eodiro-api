@@ -1,32 +1,43 @@
 import { Response, NextHandler } from 'Http/RequestHandler'
+import { checkSchema, ValidationChain } from 'express-validator'
 
 export default class Locale {
   private static supportedCodes = [
-    'kr', // main language
+    'kr', // default language
     'en'
   ]
 
+  public static validate(): ValidationChain[] {
+    /**
+     * Validate middleware request.
+     */
+    return checkSchema({
+      language: {
+        optional: true,
+        in: 'body',
+        isString: true,
+        trim: true,
+        escape: true,
+        customSanitizer: {
+          options: (value): string => {
+            return value.toLowerCase()
+          }
+        },
+        isIn: {
+          options: [this.supportedCodes],
+          errorMessage: 'Not supported language code.'
+        },
+        errorMessage: '`language` must be an language code.'
+      }
+    })
+  }
+
   /**
-   * Check and set language code.
+   * Set language code.
    */
   public static handler(): NextHandler {
     return (req, res, next): Response | void => {
-      // check if language code is not set
-      if (!Object.prototype.hasOwnProperty.call(req.body, 'language')) {
-        req.body.language = this.supportedCodes[0] // set to main language
-
-        return next()
-      }
-
-      // check if language code is valid
-      req.body.language = req.body.language.toLowerCase()
-      if (!this.supportedCodes.includes(req.body.language)) {
-        return res.status(400).json({
-          err: {
-            msg: 'Not supported language code.'
-          }
-        })
-      }
+      req.body.language = req.body.language || this.supportedCodes[0]
 
       return next()
     }

@@ -1,5 +1,4 @@
 import dotenv from 'dotenv'
-import serverConfig from 'Configs/server'
 import DBServiceProvider from 'Providers/DBServiceProvider'
 import RouteServiceProvider from 'Providers/RouteServiceProvider'
 import ScheduleServiceProvider from 'Providers/ScheduleServiceProvider'
@@ -16,7 +15,7 @@ async function bootApp(): Promise<void> {
   await dbProvider.boot()
   scheduleProvider.boot()
   const app = routeProvider.boot()
-  app.listen(serverConfig.port)
+  app.listen(process.env.APP_PORT)
 }
 
 dotenv.config()

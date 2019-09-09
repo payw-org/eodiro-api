@@ -4,14 +4,25 @@ import CheckBuildingMiddleware from 'Http/middleware/CheckBuilding'
 import FloorsController from 'Http/controllers/vacant/FloorsController'
 import CheckFloorMiddleware from 'Http/middleware/CheckFloor'
 import ClassroomsController from 'Http/controllers/vacant/ClassroomsController'
+import RequestValidationError from 'Http/middleware/RequestValidationError'
 
-const router = express.Router()
+const router = express.Router({ mergeParams: true })
 
 /**
  * Middleware
  */
-router.use('/buildings/:building', CheckBuildingMiddleware.handler())
-router.use('/buildings/:building/floors/:floor', CheckFloorMiddleware.handler())
+router.use(
+  '/buildings/:building',
+  CheckBuildingMiddleware.validate(),
+  RequestValidationError.handler(),
+  CheckBuildingMiddleware.handler()
+)
+router.use(
+  '/buildings/:building/floors/:floor',
+  CheckFloorMiddleware.validate(),
+  RequestValidationError.handler(),
+  CheckFloorMiddleware.handler()
+)
 
 /**
  * Controller

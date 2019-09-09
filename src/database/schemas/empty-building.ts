@@ -5,11 +5,11 @@
  * @copyright 2019 Payw
  */
 
-import mongoose, { Document } from 'mongoose'
+import mongoose from 'mongoose'
 
 import emptyFacilitySchema, {
   EmptyFacilityDoc
-} from 'Database/schemas/empty_facility'
+} from 'Database/schemas/empty-facility'
 
 export interface EmptyBuildingDoc extends EmptyFacilityDoc {
   floors: EmptyFacilityDoc[]

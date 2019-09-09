@@ -1,13 +1,7 @@
 import { SimpleHandler, Response } from 'Http/RequestHandler'
-import {
-  checkSchema,
-  ValidationChain,
-  validationResult
-} from 'express-validator'
+import { checkSchema, ValidationChain } from 'express-validator'
 import Mailer from 'Helpers/Mailer'
-import University from 'Database/models/university'
-import { UniversityDoc } from 'Database/schemas/university'
-import uniqid from 'uniqid'
+import nanoid from 'nanoid'
 
 export default class InquiriesController {
   /**
@@ -22,7 +16,14 @@ export default class InquiriesController {
         isLength: { options: { min: 2, max: 500 } },
         trim: true,
         escape: true,
-        errorMessage: 'Text must be 2 - 500 length string.'
+        errorMessage: '`text` must be 2 - 500 length string.'
+      },
+      email: {
+        optional: true,
+        in: 'body',
+        isEmail: true,
+        trim: true,
+        errorMessage: '`email` must be follow email format.'
       }
     })
   }
@@ -32,28 +33,21 @@ export default class InquiriesController {
    * Send inquiry to eodiro mailbox.
    */
   public static create(): SimpleHandler {
-    return async (req, res): Promise<Response> => {
-      // Handle validation errors
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        return res
-          .status(422)
-          .json({ errors: errors.array({ onlyFirstError: true }) })
-      }
+    return (req, res): Response => {
+      let mailText = req.body.text
 
-      // get current vendor name
-      const university = (await University.findById(res.locals.univId, {
-        _id: 0,
-        vendor: 1
-      })) as UniversityDoc
+      if (req.body.email) {
+        mailText += '\n\n답변주소: ' + req.body.email
+      } else {
+        mailText += '\n\n답변주소 미지정'
+      }
 
       // send mail
       Mailer.sendMail({
         from: '"어디로" <contact@payw.org>',
         to: 'contact@payw.org',
-        subject:
-          '어디로 문의 <' + university.vendor + '> - ' + uniqid.process(),
-        text: req.body.text
+        subject: '어디로 문의 [' + req.params.vendor + '] - ' + nanoid(10),
+        text: mailText
       })
 
       return res.status(204).json({})

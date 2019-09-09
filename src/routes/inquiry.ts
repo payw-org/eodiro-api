@@ -1,7 +1,8 @@
 import express from 'express'
 import InquiriesController from 'Http/controllers/inquiry/InquiriesController'
+import RequestValidationError from 'Http/middleware/RequestValidationError'
 
-const router = express.Router()
+const router = express.Router({ mergeParams: true })
 
 /**
  * Controller
@@ -10,6 +11,7 @@ const router = express.Router()
 router.post(
   '/',
   InquiriesController.validateCreate(),
+  RequestValidationError.handler(),
   InquiriesController.create()
 )
 

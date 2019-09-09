@@ -8,7 +8,7 @@ export default class FloorsComparator {
    * Return compare result as descending order.
    */
   public static comparator(): Comparator {
-    return (a, b) => {
+    return (a, b): number => {
       const numA = this.floorToNumber(a.number)
       const numB = this.floorToNumber(b.number)
 
@@ -24,7 +24,7 @@ export default class FloorsComparator {
    */
   private static floorToNumber(floor: string): number {
     // check if basement floor
-    if (floor.substring(0, 1).toLowerCase() == 'b') {
+    if (floor.substring(0, 1).toLowerCase() === 'b') {
       return -parseInt(floor.substring(1))
     } else {
       return parseInt(floor)
