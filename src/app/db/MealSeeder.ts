@@ -1,4 +1,4 @@
-import CAUFoodScraper, { ScrapedData } from '@payw/cau-food-scraper'
+import { CAUFS, ScrapedData } from '@payw/cau-food-scraper'
 import DayMeal from 'Database/models/day-meal'
 import LogHelper from 'Helpers/LogHelper'
 import { DayMealDoc } from 'Database/schemas/day-meal'
@@ -72,7 +72,7 @@ export default class MealSeeder {
     const meals: ScrapedData[] = []
 
     meals.push(
-      await CAUFoodScraper({
+      await CAUFS({
         id: process.env.FOOD_SCRAPER_ID,
         pw: process.env.FOOD_SCRAPER_PASSWORD,
         days: dayScope
