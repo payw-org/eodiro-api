@@ -15,19 +15,9 @@ export default class MealSeeder {
     let meals: ScrapedData[]
 
     const mealCount = await DayMeal.estimatedDocumentCount()
-    // if meals are empty
-    if (mealCount === 0) {
-      meals = await this.scrapeMeals()
-      await this.seedMeals(meals)
 
-      return
-    }
-
-    // if meals are not recent
-    if (!(await this.isRecent())) {
-      meals = await this.scrapeMeals()
-      await this.seedMeals(meals)
-    }
+    meals = await this.scrapeMeals()
+    await this.seedMeals(meals)
   }
 
   /**
