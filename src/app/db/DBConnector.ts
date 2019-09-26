@@ -9,6 +9,7 @@ export default class DBConnector {
   public async connect(): Promise<void> {
     // open the database connection
     await mongoose.connect(dbConfig.uri, {
+      useUnifiedTopology: true,
       useNewUrlParser: true,
       useFindAndModify: false,
       useCreateIndex: true
