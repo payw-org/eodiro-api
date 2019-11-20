@@ -1,4 +1,5 @@
-import { CAUFS, ScrapedData } from '@payw/cau-food-scraper'
+import { CAUFS } from 'src/modules/food-scraper'
+import { ScrapedData } from 'src/modules/food-scraper/types'
 import DayMeal from 'Database/models/day-meal'
 import LogHelper from 'Helpers/LogHelper'
 import { DayMealDoc } from 'Database/schemas/day-meal'
