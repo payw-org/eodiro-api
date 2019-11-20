@@ -2,9 +2,9 @@ import schedule from 'node-schedule'
 import MealSeeder from 'DB/MealSeeder'
 
 const mealSchedulingOption = {
-  hour: 0,
+  hour: 6,
   minute: 0,
-  second: 30
+  second: 0
 }
 
 export default class MealScheduler {
